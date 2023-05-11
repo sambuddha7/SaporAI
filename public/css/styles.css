@@ -2,3 +2,6 @@
   margin: auto;
   width: 50%;
 }
+.card-img-top {
+  width: 70%;
+}
