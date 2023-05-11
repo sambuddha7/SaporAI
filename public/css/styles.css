@@ -1,7 +1,133 @@
-.footer {
-  margin: auto;
-  width: 50%;
+/* Set the background color of the body */
+body {
+  background-color: #f8f9fa;
 }
-.card-img-top {
-  width: 70%;
+
+/* Style the navigation bar */
+.navbar {
+  background-color: #fff;
+  border-bottom: 1px solid #e9ecef;
+}
+
+/* Style the logo in the navigation bar */
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Style the active link in the navigation bar */
+.nav-item.active .nav-link {
+  color: #007bff;
+}
+
+/* Style the header section */
+#header {
+  padding: 100px 0;
+  background-image: url('https://images.pexels.com/photos/7130555/pexels-photo-7130555.jpeg?cs=srgb&dl=pexels-codioful-%28formerly-gradienta%29-7130555.jpg&fm=jpg');
+  background-size: cover;
+/*   color: #fff; */
+
+}
+
+/* Style the title in the header section */
+#header h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+}
+
+/* Style the text in the header section */
+#header p {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+/* Style the button in the header section */
+#header .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+/* Style the meal image in the header section */
+#header img {
+  max-height: 400px;
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Styles for Features Section */
+#features {
+    background-color: #f8f9fa;
+    padding: 100px 0;
+}
+
+.feature-box {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    padding: 30px;
+    text-align: center;
+}
+
+.feature-box i {
+    color: #f8a978;
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.feature-box h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.feature-box p {
+    font-size: 18px;
+    margin-bottom: 0;
+}
+
+/* Styles for CTA Section */
+#cta {
+/*     background-color: #f8a978;
+    color: #fff;
+    padding: 100px 0; */
+    padding: 100px 0;
+  background-image: url('https://images.pexels.com/photos/7130555/pexels-photo-7130555.jpeg?cs=srgb&dl=pexels-codioful-%28formerly-gradienta%29-7130555.jpg&fm=jpg');
+  background-size: cover;
+}
+
+#cta h2 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#cta p {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+/* Styles for Footer Section */
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 30px 0;
+    text-align: center;
+}
+
+footer p {
+    font-size: 16px;
+    margin-bottom: 0;
+    padding: 10px 0;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .feature-box {
+        margin-bottom: 15px;
+    }
 }
