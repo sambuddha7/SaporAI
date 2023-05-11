@@ -1,2 +1,2 @@
 # MealGenie
-# remote 2
+# remote 1
