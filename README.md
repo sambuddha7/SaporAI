@@ -5,3 +5,5 @@
  2. After cloning install all the dependencies through 
  ```npm i```
  3. Run the website using ```node app.js```
+
+ When working as a single user git add->commit->push
