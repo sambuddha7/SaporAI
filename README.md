@@ -8,7 +8,7 @@
 
 ## For dev team
 
-When working together on same files:
+1. When working together on same files:
 
 ``` git add <filename> ```
 ``` git commit -m "" ```
@@ -17,4 +17,4 @@ When working together on same files:
  accept both incoming changes
  then same as committing alone
 
-When working as a single user git add->commit->push
+2. When working as a single user git add->commit->push
