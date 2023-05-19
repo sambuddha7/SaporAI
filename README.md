@@ -5,3 +5,4 @@
  2. After cloning install all the dependencies through 
  ```npm i```
  3. Run the website using ```node app.js```
+ 4. run with local host
