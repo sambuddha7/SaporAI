@@ -57,6 +57,7 @@ app.get("/contact", function(req, res) {
   res.render("home", {testVar: "test"});
 });
 
+
 //signup form post method
 
 app.post("/signup", async (req, res) => {
