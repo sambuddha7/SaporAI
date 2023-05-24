@@ -56,7 +56,15 @@ app.get("/signup", function(req, res) {
 app.get("/contact", function(req, res) {
   res.render("home", {testVar: "test"});
 });
-
+app.get("/form-ai1", function(req, res) {
+  res.render("form-ai1", {testVar: "test"});
+});
+app.get("/user", function(req, res) {
+  res.render("user", {testVar: "test"});
+});
+app.get("/form-ai2", function(req, res) {
+  res.render("form-ai2", {testVar: "test"});
+});
 
 //signup form post method
 
@@ -76,7 +84,7 @@ app.post("/signup", async (req, res) => {
   const user = new User({ email, password, age, height, weight, allergy, activity, fitness});
   try {
      await user.save();
-     res.render("home", {testVar: "test"});
+     res.render("user", {testVar: "test"});
   } catch (error) {
      res.status(500).send("Error creating user");
   }
