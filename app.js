@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const app = express();
 
 
-mongoose.connect("mongodb://localhost:27017/loginDB", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect("mongodb+srv://sambuddha7:<Password>@cluster0.mtk5ama.mongodb.net/loginDB", {useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
 
 app.set('view engine', 'ejs');

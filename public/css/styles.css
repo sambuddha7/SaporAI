@@ -95,10 +95,9 @@ body {
 
 /* Styles for CTA Section */
 #cta {
-/*     background-color: #f8a978;
-    color: #fff;
-    padding: 100px 0; */
-    padding: 100px 0;
+  /* color: white; */
+  padding: 100px 0;
+  /* background-color: #e6fff5; */
   background-image: url('https://images.pexels.com/photos/7130555/pexels-photo-7130555.jpeg?cs=srgb&dl=pexels-codioful-%28formerly-gradienta%29-7130555.jpg&fm=jpg');
   background-size: cover;
 }
