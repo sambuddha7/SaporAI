@@ -27,7 +27,9 @@ const userSchema = new mongoose.Schema({
   weight: Number,
   allergy: [String],
   activity: String,
-  fitness: String
+  gender: String,
+  preference: String,
+  goal: String
 });
 userSchema.pre('save', async function (next) {
   const user = this;
@@ -73,18 +75,19 @@ app.post("/signup", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const age =  req.body.age;
-  const height =  req.body.height;
+  const gender = req.body.gender;
+  const height =  (req.body.feet * 60) + req.body.inches;
   const weight =  req.body.weight;
   const allergy = req.body.allergies;
   const activity = req.body.activity;
-  const fitness = req.body.fitness;
+  const preference = req.body.preference;
+  const goal = req.body.goal;
 
 
-
-  const user = new User({ email, password, age, height, weight, allergy, activity, fitness});
+  const user = new User({ email, password, age, height, weight, allergy, activity, gender, preference, goal});
   try {
      await user.save();
-     res.render("user", {testVar: "test"});
+     res.render("user");
   } catch (error) {
      res.status(500).send("Error creating user");
   }
