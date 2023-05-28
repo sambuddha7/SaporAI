@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const app = express();
 
 
-mongoose.connect("mongodb+srv://sambuddha7:<Password>@cluster0.mtk5ama.mongodb.net/loginDB", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect("mongodb+srv://sambuddha7:Messime16!@cluster0.mtk5ama.mongodb.net/loginDB", {useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
 
 app.set('view engine', 'ejs');
@@ -108,7 +108,7 @@ app.post('/login', async (req, res) => {
   if (!match) {
     return res.status(401).send("Invalid password");
   }
-  res.render("home", {testVar: "test"});
+  res.render("user");
 });
 
 
