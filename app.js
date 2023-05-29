@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
@@ -5,8 +6,8 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const app = express();
 
-
-mongoose.connect("mongodb+srv://sambuddha7:Messime16!@cluster0.mtk5ama.mongodb.net/loginDB", {useNewUrlParser: true, useUnifiedTopology: true});
+const mongopw = process.env.MONGOPW;
+mongoose.connect(`mongodb+srv://sbiswas7:${mongopw}@cluster0.mtk5ama.mongodb.net/loginDB`, {useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
 
 app.set('view engine', 'ejs');
