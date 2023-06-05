@@ -7,6 +7,7 @@ body {
 .navbar {
   background-color: #fff;
   border-bottom: 1px solid #e9ecef;
+  margin: 0 1.5%;
 }
 
 /* Style the logo in the navigation bar */
@@ -283,3 +284,16 @@ select {
 }
 
 
+.button-link {
+  min-width: 50%;
+  display: inline-block;
+  padding: auto;
+  text-decoration: none;
+  border-radius: 4px;
+  border: 1px solid darkgray;
+}
+
+.button-link:hover {
+  background-color:  #f2f2f2
+  ;
+}
