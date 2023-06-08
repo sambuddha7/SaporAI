@@ -9,7 +9,7 @@
           <div class="form-group">
             
             <label for="email">Email</label>
-            <input type="email" name="email" id ="email" required>
+            <input type="email" name="username" id ="email" required>
             
             <label for="password">Password</label>
             <input type="password" name="password" id ="password" required>
@@ -19,131 +19,17 @@
             <input type="password" name="re-password" id ="re-password" required>
             <p id="passwordMatchError" style="color: red; display: none;">Passwords do not match.</p>
       
-            <button id="nextid" class="btn btn-outline-secondary"type="button" data-next >Next</button>
-          </div>
-        </div>
-        <div class="card"data-step>
-          <small>STEP <strong>2</strong> of 3</small>
-          <h3 class="step-title">Let's get to know you</h3>
-          <p>Let us get to know you so we can suggest the best meals for you!</p>
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" name="name" id ="name" required>
-            
-             <label for="age">Age</label>
-             <input type="number" id="age" min="0" max="100"name="age" required>
-            <label>Gender</label>
-              <select class="select-3" name="gender">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-             </select>
-            
-      <!--         height -->
-            
-            <div class="button h-button">
-              <label>Height</label>
-              <select class="h-select" name="feet">
-              <option value="1">1 ft</option>
-              <option value="2">2 ft</option>
-              <option value="3">3 ft</option>
-              <option value="4">4 ft</option>
-              <option value="5">5 ft</option>
-              <option value="6">6 ft</option>
-              <option value="7">7 ft</option>
-      <!-- Add more options for feet -->
-            </select>
-      
-            <select class="h-select"name="inches">
-              <option value="0">0 in</option>
-              <option value="1">1 in</option>
-              <option value="2">2 in</option>
-              <option value="3">3 in</option>
-              <option value="4">4 in</option>
-              <option value="5">5 in</option>
-              <option value="6">6 in</option>
-              <option value="7">7 in</option>
-              <option value="8">8 in</option>
-              <option value="9">9 in</option>
-              <option value="10">10 in</option>
-              <option value="11">11 in</option>
-            </select>
+            <button id="nextid" class="btn btn-outline-secondary"type="submit" data-next >Next</button>
+            <hr>
+            <div class="card-body" style="text-align: center;">
+              <a class="btn btn-block button-link" href="/auth/google" role="button">
+                <small><img style="height: 15px;"src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png"></small>
+                Sign Up with Google
+              </a>
             </div>
-            
-      
-            
-            <label for="weight">Weight</label>
-            <input placeholder="pounds"type="number" min="0" max="1000"id="weight" name="weight" required>
-            
-            <div class="button">
-               <button class="btn btn1 btn-outline-secondary"type="button"data-previous >Previous</button>
-            <button class="btn btn1 btn-outline-secondary"type="button"data-next>Next</button>
-            </div>
-           
-      
           </div>
         </div>
         
-        <div class="card"data-step>
-          <small>STEP <strong>3</strong> of 3</small>
-          <h3 class="step-title">Tell us your Diet habits and goals</h3>
-          <p>Almost done! Onwards to quick and easy meals.</p>
-          <div class="form-group">
-            <label>Diet Goals</label>
-              <select class="select-3" name="goal">
-                <option value="Weight Loss">⬇️ Weight Loss</option>
-                <option value="Maintenance">⚖️ Maintenance</option>
-                <option value="Weight Gain">⬆️ Weight Gain</option>
-              </select>
-            
-            
-              <label>Activity</label>
-              <select class="select-3"name="activity">
-                <option value="Sedentary">🚶 Sedentary: Little or no exercise</option>
-                <option value="Light">🧘 Light: Exercise 1-3 times per week</option>
-                <option value="Moderate">🚴 Moderate: Exercise 4-5 times per week</option>
-                <option value="Active">🏋️ Active: Daily exercise or intense exercise 4-5 times per week</option>
-                <option value="Very Active">💪 Very Active: Intense exercise 6-7 times per week</option>
-              </select>
-            
-            <label>Dietary Preference</label>
-              <select class="select-3" name="preference">
-                <option value="Vegetarian">🥦 Vegetarian</option>
-                <option value="Vegan">🥬 Vegan</option>
-                <option value="Non-Vegetarian">🍖 Non-Vegetarian</option>
-              </select>
-            
-        <label>Allergies</label>
-          <div class="allergies">
-            <input type="checkbox" name="allergies" value="peanuts" >
-            <label for="peanuts">Peanuts</label>
-            <br>
-            <input type="checkbox" name="allergies" value="shellfish" >
-            <label for="shellfish">Shellfish</label>
-            <br>
-            <input type="checkbox" name="allergies" value="dairy" >
-            <label for="dairy">Dairy</label>
-            <br>
-            <input type="checkbox" name="allergies" value="soybeans" >
-            <label for="dairy">Soybeans</label>
-            <br>
-            <input type="checkbox" name="allergies" value="eggs" >
-            <label for="dairy">Eggs</label>
-            <br>
-            <input type="checkbox" name="allergies" value="fish" >
-            <label for="dairy">Fish</label>
-            <br>
-            <input type="checkbox" name="allergies" value="wheat" >
-            <label for="dairy">Wheat</label>
-          </div>
-            <div class="button">
-               <button class="btn btn1 btn-outline-secondary"type="button" data-previous>Previous</button>
-            <button class="btn btn1 btn-outline-info"type="submit">Submit</button>
-            </div>
-           
-          </div>
-        </div>
-       
       </form>
       </div>
   </section>

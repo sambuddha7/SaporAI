@@ -1,27 +1,41 @@
 <%- include("partials/header"); -%>
+<section id="signup">
+  <div class="signup-container">
+    <form class="multi-step-form"  action="/login" method="POST">
 
-<form class="form-group" action="/login" method="POST">
-  <div>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
+      <div class="card active">
+        <h3 class="step-title">Log Into Your Account!</h3>
+        <div class="form-group">
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button class="btn btn-outline-secondary" type="submit">Login</button>
+            
+        </div>
+        <hr>
+        <div class="form-group">
+          <p style="text-align: center;">New to MealGenie?</p>
+          <a style="text-align: center; text-decoration: none;"href="/signup">Sign Up</a>
+        </div>
+        
+
+      </div>
+    </form>
+    <div class="col-sm-4">
+      <div class="social-block">
+        <div class="card-body">
+          <a class="btn btn-block" href="/auth/google" role="button">
+            <i class="fab fa-google"></i>
+            Sign Up with Google
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
+</section>
 
-
-
-
-
-  <div>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-  </div>
-
-
-
-  <div>
-    <button class="btn btn-primary" type="submit">Login</button>
-  </div>
-</form>
-<a href="/signup">Sign Up</a>
 
 
 
