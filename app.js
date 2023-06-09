@@ -231,6 +231,7 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
   res.redirect('/user');
 });
 
+
 app.post("/result-2", async(req, res) => {
   //api calls to be added
   res.redirect("/result-2");
