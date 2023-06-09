@@ -160,7 +160,7 @@
 
 
     function addItem() {
-        var listInput = document.getElementById("list-input");
+        var listInput = document.getElementById("list");
         var listItem = document.createElement("li");
 
         var itemNumber = document.createElement("span");
@@ -194,7 +194,7 @@
     }
     function validateForm() {
         const mealCheckboxes = document.querySelectorAll('input[name="meal"]:checked');
-        const listInput = document.getElementById("list-input");
+        const listInput = document.getElementById("list");
         const mealError = document.getElementById("meal-error");
         const ingredientError = document.getElementById("ingredient-error");
         
@@ -205,36 +205,35 @@
             mealError.textContent = "Please select at least one meal option.";
             return;
         }
-        alert("Form submitted successfully!");
     }
   </script>
 </head>
 <body>
   <div class="container">
-    <h2>Let's get to cooking!</h2>
-    <form>
+    <form class = "form-group" action = "/result-2" method = "POST">
+      <h2>Let's get to cooking!</h2>
         <div class="checkbox-group">
             <label>What meal would you like to eat?</label>
-            <input type="checkbox" id="breakfast-checkbox" name="meal" value="breakfast" onclick="return handleCustomCheckboxChange(this)" required>
+            <input type="checkbox" id="breakfast-checkbox" name="meal" value="breakfast" onclick="return handleCustomCheckboxChange(this)">
             <label for="breakfast-checkbox">Breakfast</label>
-            <input type="checkbox" id="lunch-checkbox" name="meal" value="lunch" onclick="return handleCustomCheckboxChange(this)" required>
+            <input type="checkbox" id="lunch-checkbox" name="meal" value="lunch" onclick="return handleCustomCheckboxChange(this)">
             <label for="lunch-checkbox">Lunch</label>
-            <input type="checkbox" id="dinner-checkbox" name="meal" value="dinner" onclick="return handleCustomCheckboxChange(this)" required>
+            <input type="checkbox" id="dinner-checkbox" name="meal" value="dinner" onclick="return handleCustomCheckboxChange(this)">
             <label for="dinner-checkbox">Dinner</label>
-            <input type="checkbox" id="snack-checkbox" name="meal" value="snack" onclick="return handleCustomCheckboxChange(this)" required>
+            <input type="checkbox" id="snack-checkbox" name="meal" value="snack" onclick="return handleCustomCheckboxChange(this)">
             <label for="snack-checkbox">Snack</label>
             <div id="meal-error" class="error-message"></div>
         </div>
         <div class="checkbox-group">
             <label>What ingredients are available to you?</label>
             <ul class="list"></ul>
-            <input type="text" id="list-input" placeholder="Enter an item">
+            <input type="text" id="list" placeholder="Enter an item">
             <button type="button" class="btn" onclick="addItem()">Add</button>
             <div id="ingredient-error" class="error-message"></div>
         </div>
         <div class="checkbox-group">
             <label>Do you have any calorie requirements?<sup class="optional">*optional</sup></label>
-            <select id="preference-dropdown">
+            <select id="calories" name = "selection">
                 <option value="" selected disabled>Select an option</option>
                 <option value="< 300">&lt; 300</option>
                 <option value="300-450">300-450</option>

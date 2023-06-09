@@ -159,6 +159,10 @@ app.get("/logout", function(req,res) {
       res.redirect('/');
     });
 });
+
+app.get("/result-2", function(req, res) {
+  res.render("result-2");
+});
 //signup form post method
 
 app.post("/signup", async (req, res) => {
@@ -227,7 +231,10 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
   res.redirect('/user');
 });
 
-
+app.post("/result-2", async(req, res) => {
+  //api calls to be added
+  res.redirect("/result-2");
+});
 
 //port stuff
 app.listen(3000, function() {

@@ -1,4 +1,4 @@
-# MealGenie
+# SaporAI
 ## Installation and Running Instructions
 
  1. Clone the repository from GitHub
