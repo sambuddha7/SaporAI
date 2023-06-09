@@ -124,7 +124,7 @@ app.get("/goauth", function(req,res) {
     })
   })
 app.get("/login", function(req, res) {
-  res.render("login", {testVar: "test"});
+  res.render("login", { error: '' });
 });
 app.get("/signup", function(req, res) {
   res.render("signup", {testVar: "test"});
@@ -209,26 +209,27 @@ app.post("/signup-2", function(req, res) {
   })
 });
 
-// app.post("/login", function(req, res) {
-//   const user = new User({
-//       username: req.body.username,
-//       password: req.body.password
-//   });
-//   req.logIn(user, function (err) {
-//       if (err) {
-//           console.log("login-error");
-//           res.redirect("/login");
-//       } else {
-//           passport.authenticate("lcoal")(req, res, function() {
-//               console.log("success");
-//               res.redirect("/user");
-//           })
-//       }
-//   })
+// app.post('/login', passport.authenticate('local'), (req, res) => {
+//   // Handle successful authentication
+//   res.redirect('/user');
 // });
-app.post('/login', passport.authenticate('local'), (req, res) => {
-  // Handle successful authentication
-  res.redirect('/user');
+app.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.render('login', { error: 'Incorrect username or password.' });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        // Handle error
+        return next(err);
+      }
+      // User authentication succeeded, redirect or render a success page
+      return res.redirect('/user');
+    });
+  })(req, res, next);
 });
 
 
