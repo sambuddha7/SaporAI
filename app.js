@@ -31,7 +31,7 @@ app.use(express.json());
 
 
 const mongopw = process.env.MONGOPW;
-mongoose.connect(`mongodb+srv://sbiswas7:${mongopw}@cluster0.mtk5ama.mongodb.net/userDB`, {useNewUrlParser: true});
+mongoose.connect(`mongodb+srv://sbiswas7:${mongopw}@cluster0.mtk5ama.mongodb.net/`, {useNewUrlParser: true});
 // mongoose.connect("mongodb://localhost:27017/usertestDB", {useNewUrlParser: true});
 
 const db = mongoose.connection;
@@ -205,22 +205,26 @@ app.post("/signup-2", function(req, res) {
   })
 });
 
-app.post("/login", function(req, res) {
-  const user = new User({
-      username: req.body.username,
-      password: req.body.password
-  });
-  req.logIn(user, function (err) {
-      if (err) {
-          console.log("login-error");
-          res.redirect("/login");
-      } else {
-          passport.authenticate("lcoal")(req, res, function() {
-              console.log("success");
-              res.redirect("/user");
-          })
-      }
-  })
+// app.post("/login", function(req, res) {
+//   const user = new User({
+//       username: req.body.username,
+//       password: req.body.password
+//   });
+//   req.logIn(user, function (err) {
+//       if (err) {
+//           console.log("login-error");
+//           res.redirect("/login");
+//       } else {
+//           passport.authenticate("lcoal")(req, res, function() {
+//               console.log("success");
+//               res.redirect("/user");
+//           })
+//       }
+//   })
+// });
+app.post('/login', passport.authenticate('local'), (req, res) => {
+  // Handle successful authentication
+  res.redirect('/user');
 });
 
 

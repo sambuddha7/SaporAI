@@ -20,6 +20,9 @@ body {
 .nav-item.active .nav-link {
   color: #007bff;
 }
+.nav-img {
+  background-image: url(logo/favicon.png);
+}
 #navbarNav {
 
   justify-content: right;
