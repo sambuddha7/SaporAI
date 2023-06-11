@@ -78,13 +78,31 @@ passport.deserializeUser(function (user, cb) {
 passport.use(new GoogleStrategy({
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  callbackURL: "http://localhost:3000/auth/google/signup-2",
-  userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+  callbackURL: "http://localhost:3000/auth/google/signup-2"
+  // userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
 },
-function(accessToken, refreshToken, profile, cb) {
-  User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    return cb(err, user);
-  });
+function (accessToken, refreshToken, profile, cb) {
+  User.findOne({ googleId: profile.id })
+    .then((user) => {
+      if (!user) {
+        user = new User({
+          username: profile.id,
+          googleId: profile.id
+        });
+        user.save()
+          .then((savedUser) => {
+            cb(null, savedUser);
+          })
+          .catch((err) => {
+            cb(err);
+          });
+      } else {
+        cb(null, user);
+      }
+    })
+    .catch((err) => {
+      cb(err);
+    });
 }
 ));
 
@@ -98,12 +116,12 @@ app.get('/auth/google/signup-2',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.redirect('/user');
+    res.redirect('/goauth');
 });
 app.get("/goauth", function(req,res) {
-    User.findOne(req.user.username).then((foundUser) => {
+    console.log(req.user);
+    User.findById(req.user.id).then((foundUser) => {
       if (foundUser) {
-        console.log(foundUser);
         // res.redirect("/signup-2");
         if (typeof foundUser.age === 'undefined') {
           res.redirect("/signup-2");
@@ -114,6 +132,19 @@ app.get("/goauth", function(req,res) {
     }).catch(function(err) {
       console.log("goauth error");
     })
+    // User.findOne(req.user.username).then((foundUser) => {
+    //   if (foundUser) {
+    //     console.log(foundUser);
+    //     // res.redirect("/signup-2");
+    //     if (typeof foundUser.age === 'undefined') {
+    //       res.redirect("/signup-2");
+    //     } else {
+    //       res.redirect("/user");
+    //     }
+    //   }
+    // }).catch(function(err) {
+    //   console.log("goauth error");
+    // })
   })
 app.get("/login", function(req, res) {
   res.render("login", { error: '' });
@@ -135,7 +166,6 @@ app.get("/form-ai1", function(req, res) {
   res.render("form-ai1", {testVar: "test"});
 });
 app.get("/user", function(req, res) {
-  // res.render("user", {testVar: "test"});
 
   if (req.isAuthenticated()) {
     User.findById(req.user.id).then((foundUser) => {
