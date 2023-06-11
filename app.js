@@ -31,8 +31,8 @@ app.use(express.json());
 
 
 const mongopw = process.env.MONGOPW;
-mongoose.connect(`mongodb+srv://sbiswas7:${mongopw}@cluster0.mtk5ama.mongodb.net/`, {useNewUrlParser: true});
-// mongoose.connect("mongodb://localhost:27017/usertestDB", {useNewUrlParser: true});
+// mongoose.connect(`mongodb+srv://sbiswas7:${mongopw}@cluster0.mtk5ama.mongodb.net/`, {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost:27017/usertestDB", {useNewUrlParser: true});
 
 const db = mongoose.connection;
 
@@ -46,6 +46,7 @@ db.once('open', function() {
 const userSchema = new mongoose.Schema({
   // email: {type: String, unique: true, sparse: true},
   password: String,
+  name: String,
   age: Number,
   height: Number,
   weight: Number,
@@ -60,16 +61,7 @@ userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
 
 
-// userSchema.pre('save', async function (next) {
-//   const user = this;
-//   const hash = await bcrypt.hash(user.password, 10);
-//   user.password = hash;
-//   next();
-// });
-
-
-
-const User = new mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
 
 passport.use(User.createStrategy());
 
@@ -106,7 +98,7 @@ app.get('/auth/google/signup-2',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.redirect('/goauth');
+    res.redirect('/user');
 });
 app.get("/goauth", function(req,res) {
     User.findOne(req.user.username).then((foundUser) => {
@@ -144,12 +136,21 @@ app.get("/form-ai1", function(req, res) {
 });
 app.get("/user", function(req, res) {
   // res.render("user", {testVar: "test"});
+
   if (req.isAuthenticated()) {
-    res.render("user");
+    User.findById(req.user.id).then((foundUser) => {
+      if (foundUser) {
+        res.render("user", {userName: foundUser.name});
+      }
+    }).catch(function(err) {
+      console.log("user error");
+    })
+    
   } else {
       res.redirect("/login");
   }
 });
+
 app.get("/form-ai2", function(req, res) {
   res.render("form-ai2", {testVar: "test"});
 });
@@ -187,8 +188,10 @@ app.post("/signup-2", function(req, res) {
   const activity = req.body.activity;
   const preference = req.body.preference;
   const goal = req.body.goal;
+  const name = req.body.name;
   User.findById(req.user.id).then(function(foundUser){
     if (foundUser) {
+      foundUser.name = name;
       foundUser.age = age;
       foundUser.gender = gender;
       foundUser.height = height;

@@ -8,6 +8,9 @@ body {
   background-color: #fff;
   border-bottom: 1px solid #e9ecef;
   margin: 0 1.5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* Style the logo in the navigation bar */
@@ -20,11 +23,9 @@ body {
 .nav-item.active .nav-link {
   color: #007bff;
 }
-.nav-img {
-  background-image: url(logo/favicon.png);
-}
-#navbarNav {
 
+#navbarNav {
+  display: flex;
   justify-content: right;
 }
 
