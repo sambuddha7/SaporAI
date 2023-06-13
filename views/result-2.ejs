@@ -1,1 +1,52 @@
-<h2>Result : empty rn</h2>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #4a4a4a;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    ul.recipe-list {
+      list-style-type: decimal;
+      padding-left: 20px;
+      font-size: 18px;
+      line-height: 1.5;
+      color: #4a4a4a;
+    }
+
+    ul.recipe-list li {
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+    }
+
+    ul.recipe-list li:hover {
+      background-color: #e7e7e7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Result:</h2>
+    <ul class="recipe-list">
+        <%= result %>
+    </ul>
+  </div>
+</body>
+</html>

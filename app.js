@@ -11,10 +11,19 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
 
+//api 
+const {Configuration, OpenAIApi} = require("openai");
+
+//api key auth
+const config = new Configuration({
+  apiKey: process.env.API_KEY
+});
+//instance of openai
+const openai = new OpenAIApi(config);
 
 
 const app = express();
-
+var result = "";
 
 app.use(session({
   secret: "Meal2Go",
@@ -192,7 +201,7 @@ app.get("/logout", function(req,res) {
 });
 
 app.get("/result-2", function(req, res) {
-  res.render("result-2");
+  res.render("result-2", {result});
 });
 //signup form post method
 
@@ -268,6 +277,18 @@ app.post('/login', (req, res, next) => {
 
 app.post("/result-2", async(req, res) => {
   //api calls to be added
+  var meal = req.body.meal;
+  var ingredients = req.body.list;
+  var calories = req.body.selection;
+  var prompt = `Provide a list of 5 ${meal} recipes in the calorie range of ${calories}`;
+  console.log(prompt);
+  //api calls
+  const completion = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: [{role: "user", content: prompt}],
+  });
+  //handle api response
+  result = completion.data.choices[0].message.content;
   res.redirect("/result-2");
 });
 
