@@ -234,6 +234,10 @@ app.get("/logout", function(req,res) {
 app.get("/result-2", function(req, res) {
   res.render("result-2", {result});
 });
+
+app.get("/result-1", function(req, res) {
+  res.render("result-1", {result});
+});
 //signup form post method
 
 app.post("/signup", async (req, res) => {
@@ -317,6 +321,26 @@ app.post("/result-2", async(req, res) => {
   //handle api response
   result = completion.data.choices[0].message.content;
   res.redirect("/result-2");
+});
+
+app.post("/result-1", async(req, res) => {
+  //api calls to be added
+  var meal = req.body.meal;
+  var calories = req.body.selection;
+  var type = req.body.type;
+  var proteins = req.body.proteins;
+  var carbs = req.body.carbs;
+  var fats = req.body.fats;
+  var prompt = `Provide a list of 5 ${type} ${meal} recipes in the calorie range of ${calories}, with the macros proteins: ${proteins} grams, carbs: ${carbs} grams, fats:${fats} grams`;
+  console.log(prompt);
+  //api calls
+  const completion = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: [{role: "user", content: prompt}],
+  });
+  //handle api response
+  result = completion.data.choices[0].message.content;
+  res.redirect("/result-1");
 });
 
 //port stuff

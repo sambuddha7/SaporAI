@@ -216,7 +216,7 @@
 </head>
 <body>
   <div class="container">
-    <form class = "form-group" action = "/result-2" method = "POST">
+    <form class = "form-group" action = "/result-1" method = "POST">
       <h2>Let's get to cooking!</h2>
         <div class="checkbox-group">
             <label>What meal would you like to eat?</label>
@@ -231,19 +231,14 @@
             <div id="meal-error" class="error-message"></div>
         </div>
         <div class="checkbox-group">
-            <label>How many calories do you want to consume?<sup class="optional">*optional</sup></label>
-            <select id="calories" name = "selection">
-                <option value="" selected disabled>Select an option</option>
-                <option value="< 300">&lt; 300</option>
-                <option value="300-450">300-450</option>
-                <option value="> 450">&gt; 450</option>
-            </select>
-        </div>
+          <label for="calories">How many calories do you want to consume?</label>
+          <input type="number" id="calories" name="selection" pattern="\d+(?:-\d+)?" required>
+      </div>
         <div class="checkbox-group">
             <label>Meal type</label>
-            <input type="checkbox" id="savoury" name="meal type" value="meal type" onclick="return handleCustomCheckboxChange(this)">
+            <input type="checkbox" id="savoury" name="type" value="savoury" onclick="return handleCustomCheckboxChange(this)">
             <label for="savoury">Savoury</label>
-            <input type="checkbox" id="sweet" name="meal type" value="meal type" onclick="return handleCustomCheckboxChange(this)">
+            <input type="checkbox" id="sweet" name="type" value="sweet" onclick="return handleCustomCheckboxChange(this)">
             <label for="sweet">Sweet</label>
             <div id="meal-error" class="error-message"></div>
         </div>
