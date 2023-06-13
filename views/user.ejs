@@ -1,10 +1,90 @@
 
 <%- include("partials/user-header") %>
-  <h1 style="text-align: center;">Hi, <%= userName %></h1>
-  <div class="container">
-    <h3 style="text-align: center;">AI Buttons</h3>
-    <a href="/form-ai1" class="button">AI 1</a>
-    <a href="/form-ai2" class="button ai2">AI 2</a>
+  <div class="dashboard-container">
+<!--      name and date -->
+      <div class="text">
+        <h3>Hi Sambuddha,</h3>
+        <h3 id="date"></h3>
+      </div>
+      <div>
+        
+      </div>
+<!--         user stats -->
+        <div class="user-stats">
+          <div class="item-stats">
+            <h3 class="status-number"><%= Weight %></h3>
+            <span class="status-type">Weight</span>
+          </div>
+          <div class="item-stats">
+            <h3 class="status-number"> <%= BMR %></h3>
+            <span class="status-type">Goal Calories</span>
+          </div>
+          <div class="item-stats">
+            <h3 class="status-number">620</h3>
+            <span class="status-type">Calories Consumed</span>
+          </div>
+       </div>
+      
+<!--       cards start -->
+      <div class="card-comps">
+        <div class="card-1">
+          <label for="hint1-click">
+                <input type="checkbox" id="hint1-click" style="display: none;">
+                <div class="hint1">
+                 <span>i</span>
+                  <small>Answer a more detailed questionnaire for a meal that fits your specific diet, restrictions, and cravings. SaporAI will analyze your responses and provide you with the best customized meal recommendation that satisfies your taste buds.
+</small>
+      
+            </div>
+          </label>
+          <div class="card1-content card-content">
+            <h4>Meal Recommender</h4>
+            <a href="/form-ai1" class="btn btn-outline-success">Use Now</a>
+            <hr style="color:white;">
+            <span class="card1-tags tags">Personalised</span>
+            <span class="card1-tags tags">Healthy</span>
+            <span class="card1-tags tags">Custom</span>
+
+
+          </div>
+          
+        </div>
+        
+        <div class="card-2">
+          <label for="hint2-click">
+                <input type="checkbox" id="hint2-click" style="display: none;">
+                <div class="hint2">
+                 <span>i</span>
+                  <small>Cook with what you have. Simply enter the ingredients you have on hand, and get creative recipe suggestions based on those ingredients. No more wasting food or wondering what to make.</small>
+      
+            </div>
+          </label>
+          <div class="card2-content card-content">
+            <h4>Ingredient Wizard</h4>
+            <a href="/form-ai2" class="btn btn-outline-primary">Use Now</a>
+            <hr style="color:white;">
+            <span class="card2-tags tags">Quick</span>
+            <span class="card2-tags tags">Ingredient-based</span>
+            <span class="card2-tags tags">Easy</span>
+          </div>
+          
+        </div>
+        <div class="card-3">
+          <div class="card3-content card-content">
+            <h4>Meal History</h4>
+            <small>Find history of your previously looked up meals. </small>
+            <a href="/user-history" class="btn btn-outline-danger">Use Now</a>
+            <hr style="color:white;">
+          </div>
+          
+        </div>
+      </div>
+<!--     more info -->
+      <div>
+      </div>
   </div>
+  
 </body>
-</html>
+
+
+

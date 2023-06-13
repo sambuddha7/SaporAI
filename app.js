@@ -147,10 +147,20 @@ app.get("/goauth", function(req,res) {
     // })
   })
 app.get("/login", function(req, res) {
-  res.render("login", { error: '' });
+  if (req.isAuthenticated()) {
+    res.redirect("/user");
+  } else {
+    res.render("login", { error: '' });
+  }
+  
 });
 app.get("/signup", function(req, res) {
-  res.render("signup", {testVar: "test"});
+  if (req.isAuthenticated()) {
+    res.redirect("/user");
+  } else {
+    res.render("signup");
+  }
+  
 });
 app.get("/signup-2", function(req, res) {
   if (req.isAuthenticated()) {
@@ -170,7 +180,28 @@ app.get("/user", function(req, res) {
   if (req.isAuthenticated()) {
     User.findById(req.user.id).then((foundUser) => {
       if (foundUser) {
-        res.render("user", {userName: foundUser.name});
+        const weight = foundUser.weight;
+        const height = foundUser.height;
+        const age = foundUser.age;
+        const gender = foundUser.gender;
+        const activityLevel = foundUser.activity;
+        if (gender === 'Male' || gender === 'Other') {
+          // For males: BMR = 66 + (6.23 × weight in lbs) + (12.7 × height in inches) - (6.8 × age in years)
+          bmr = 66 + (6.23 * weight) + (12.7 * height) - (6.8 * age);
+        } else if (gender === 'Female') {
+          // For females: BMR = 655 + (4.35 × weight in lbs) + (4.7 × height in inches) - (4.7 × age in years)
+          bmr = 655 + (4.35 * weight) + (4.7 * height) - (4.7 * age);
+        }
+        const activityLevels = {
+          Sedentary: 1.2, // Little to no exercise
+          Light: 1.375,   // Light exercise/sports 1-3 days per week
+          Moderate: 1.55, // Moderate exercise/sports 3-5 days per week
+          Active: 1.725,  // Active exercise/sports 6-7 days per week
+          VeryActive: 1.9 // Very active exercise/sports & physical job or 2x training
+        };
+
+        const maintenanceCalories = bmr * activityLevels[activityLevel];
+        res.render("user", {userName: foundUser.name, BMR: bmr, Weight: weight});
       }
     }).catch(function(err) {
       console.log("user error");
@@ -242,10 +273,6 @@ app.post("/signup-2", function(req, res) {
   })
 });
 
-// app.post('/login', passport.authenticate('local'), (req, res) => {
-//   // Handle successful authentication
-//   res.redirect('/user');
-// });
 app.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
