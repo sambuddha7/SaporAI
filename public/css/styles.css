@@ -65,6 +65,35 @@ body {
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
+.sliding-content {
+  animation: slideInLeft 1s ease-in-out;
+}
+
+.sliding-image {
+  animation: slideInRight 1s ease-in-out;
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
 
 /* Styles for Features Section */
 #features {
@@ -324,7 +353,12 @@ select {
   margin: 3%;
   border-radius: 25px;
   position:relative;
-  
+}
+.card-1, .card-2, .card-3 {
+  transition: transform 0.3s ease;
+}
+.card-1:hover, .card-2:hover,.card-3:hover {
+ transform: scale(1.05);
 }
 .card-2 {
   background: linear-gradient(to bottom, #def3ff,#bfe8ff);

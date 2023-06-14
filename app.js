@@ -209,8 +209,13 @@ app.get("/user", function(req, res) {
           VeryActive: 1.9 // Very active exercise/sports & physical job or 2x training
         };
 
-        const maintenanceCalories = bmr * activityLevels[activityLevel];
-        res.render("user", {userName: foundUser.name, BMR: bmr, Weight: weight});
+        var maintenanceCalories = Math.round(bmr * activityLevels[activityLevel]);
+        if (foundUser.goal == "WeightLoss") {
+          maintenanceCalories -= 200;
+        } else if (foundUser.goal == "WeightGain") {
+          maintenanceCalories += 100;
+        }
+        res.render("user", {userName: foundUser.name, BMR: maintenanceCalories, Weight: weight});
       }
     }).catch(function(err) {
       console.log("user error");
