@@ -108,8 +108,11 @@ body {
     margin-bottom: 30px;
     padding: 30px;
     text-align: center;
+    transition: transform 0.3s ease;
 }
-
+.feature-box:hover {
+  transform: scale(1.05);
+}
 .feature-box i {
     color: #f8a978;
     font-size: 50px;
