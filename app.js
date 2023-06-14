@@ -196,10 +196,10 @@ app.get("/user", function(req, res) {
         const activityLevel = foundUser.activity;
         if (gender === 'Male' || gender === 'Other') {
           // For males: BMR = 66 + (6.23 × weight in lbs) + (12.7 × height in inches) - (6.8 × age in years)
-          bmr = 66 + (6.23 * weight) + (12.7 * height) - (6.8 * age);
+          bmr = Math.floor(66 + (6.23 * weight) + (12.7 * height) - (6.8 * age));
         } else if (gender === 'Female') {
           // For females: BMR = 655 + (4.35 × weight in lbs) + (4.7 × height in inches) - (4.7 × age in years)
-          bmr = 655 + (4.35 * weight) + (4.7 * height) - (4.7 * age);
+          bmr = Math.floor(655 + (4.35 * weight) + (4.7 * height) - (4.7 * age));
         }
         const activityLevels = {
           Sedentary: 1.2, // Little to no exercise
@@ -309,9 +309,10 @@ app.post('/login', (req, res, next) => {
 app.post("/result-2", async(req, res) => {
   //api calls to be added
   var meal = req.body.meal;
-  var ingredients = req.body.list;
+  var ingredients = JSON.parse(req.body.listData);
+  console.log("Ingredients:", ingredients);
   var calories = req.body.selection;
-  var prompt = `Provide a list of 5 ${meal} recipes in the calorie range of ${calories}`;
+  var prompt = `Provide a list of 5 ${meal} recipes in the calorie range of ${calories} using the ingredients ${ingredients}`;
   console.log(prompt);
   //api calls
   const completion = await openai.createChatCompletion({

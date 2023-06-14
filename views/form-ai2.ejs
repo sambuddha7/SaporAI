@@ -157,8 +157,7 @@
             }
         }
     }
-
-
+    var list = [];
     function addItem() {
         var listInput = document.getElementById("list");
         var listItem = document.createElement("li");
@@ -172,16 +171,21 @@
         var removeButton = document.createElement("button");
         removeButton.innerHTML = "&#10060;"; // Cross symbol
         removeButton.addEventListener("click", function() {
+            var indexToRemove = Array.prototype.indexOf.call(listItem.parentNode.children, listItem);
             listItem.parentNode.removeChild(listItem);
+            list.splice(indexToRemove, 1); // Remove the item from the list array
             updateItemNumbers();
+            document.getElementById("list-data").value = JSON.stringify(list);
         });
         listItem.appendChild(itemNumber);
         listItem.appendChild(itemText);
         listItem.appendChild(removeButton);
         document.querySelector(".list").appendChild(listItem);
+        list.push(listInput.value);
         listInput.value = "";
 
         updateItemNumbers();
+        document.getElementById("list-data").value = JSON.stringify(list);
     }
 
     function updateItemNumbers() {
@@ -239,6 +243,9 @@
                 <option value="> 450">&gt; 450</option>
             </select>
         </div>
+        <div class="checkbox-group">
+          <input type="hidden" id="list-data" name="listData" value="">
+      </div>
         <button type="submit" class="btn" onclick="return validateForm()">Submit</button>
     </form>
   </div>
