@@ -315,18 +315,51 @@ app.post("/result-2", async(req, res) => {
   //api calls to be added
   var meal = req.body.meal;
   var ingredients = JSON.parse(req.body.listData);
-  console.log("Ingredients:", ingredients);
+  // console.log("Ingredients:", ingredients);
   var calories = req.body.selection;
-  var prompt = `Provide a list of 5 ${meal} recipes in the calorie range of ${calories} using the ingredients ${ingredients}`;
-  console.log(prompt);
+  if (typeof calories === 'undefined') {
+    calories = "300-500";
+  }
+  const marker = "###SECTION_MARKER###";
+  // var prompt = `Provide a list of 5 ${meal} recipes in the calorie range of ${calories} using the ingredients ${ingredients}`;
+  var prompt = `Provide a ${meal} recipe in the calorie range of ${calories} using the ingredients ${ingredients} in the following format:
+  Name of dish
+  ${marker}
+  Nutrtional Information
+  ${marker}
+  Ingredients
+  ${marker}
+  Instructions`;
+
+
+  // console.log(prompt);
   //api calls
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
-    messages: [{role: "user", content: prompt}],
+    messages: [{role:"system", "content" : "You are SaporAI helpful assistant generate healhty meals"},{role: "user", content: prompt}],
   });
   //handle api response
   result = completion.data.choices[0].message.content;
-  res.redirect("/result-2");
+  console.log(result);
+  // console.log(result);
+  const sections = result.split(marker);
+  // console.log(sections.length);
+// Extract the nutrition information, ingredients, and recipe steps
+  const name = sections[0];
+
+  const nutritionInfo = sections[1];
+  const ingredientss = sections[3];
+  const recipeSteps = sections[5];
+  console.log("nut:");
+  console.log(sections[1]);
+  console.log("ingr:");
+  console.log(sections[3]);
+  console.log("steps:");
+
+  console.log(sections[5]);
+
+
+  res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
 });
 
 app.post("/result-1", async(req, res) => {
@@ -337,12 +370,13 @@ app.post("/result-1", async(req, res) => {
   var proteins = req.body.proteins;
   var carbs = req.body.carbs;
   var fats = req.body.fats;
-  var prompt = `Provide a list of 5 ${type} ${meal} recipes in the calorie range of ${calories}, with the macros proteins: ${proteins} grams, carbs: ${carbs} grams, fats:${fats} grams`;
+  var prompt = `Provide a list of ${type} ${meal} recipes in the calorie range of ${calories}, with the macros proteins: ${proteins} grams, carbs: ${carbs} grams, fats:${fats} grams`;
   console.log(prompt);
   //api calls
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
-    messages: [{role: "user", content: prompt}],
+    messages: [ {role:"system", "content" : "You are SaporAI helpful assistant generate healhty meals"},
+      {role: "user", content: prompt}],
   });
   //handle api response
   result = completion.data.choices[0].message.content;

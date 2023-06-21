@@ -1,52 +1,53 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f8f8;
-      margin: 0;
-      padding: 0;
-    }
+<%- include("partials/user-header") %>
+<script src="/result-script.js" defer></script>
+  <div class="dashboard-container">
+    <div class="result-body">
+      <h3> <%= recipeName %></h3>
+      <div id="nutr-container" class="card-n">
+        <% const nutri = nutrInfo %>
+        <%const lines = nutri.split('\n');%>
+  
+        <%const nutArray = []%>
+        <%const nonEmptyLines = lines.filter(line => line.trim() !== '');%>
+      
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
+      
 
-    h2 {
-      color: #4a4a4a;
-      text-align: center;
-      margin-bottom: 30px;
-    }
+        <%for (let i = 1; i < nonEmptyLines.length; i++) {%>
+        <%  const trimmedLine = nonEmptyLines[i].trim();%>
 
-    ul.recipe-list {
-      list-style-type: decimal;
-      padding-left: 20px;
-      font-size: 18px;
-      line-height: 1.5;
-      color: #4a4a4a;
-    }
-
-    ul.recipe-list li {
-      padding: 10px;
-      margin-bottom: 10px;
-      background-color: #f1f1f1;
-      border-radius: 5px;
-    }
-
-    ul.recipe-list li:hover {
-      background-color: #e7e7e7;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h2>Result:</h2>
-    <ul class="recipe-list">
-        <%= result %>
-    </ul>
+        <%  const [key, value] = trimmedLine.split(':');%>
+        <% var lit = `${key.trim()}: ${value.trim()}`;%>
+        <% lit = lit.substring(1);%>
+        <% nutArray.push(lit)%>
+        <%}%>
+        <div class="card-n-content">
+          <h5 style="text-align:center; margin-bottom: 3%;">Nutritional info</h5>
+          <ul class="nut-list">
+            <div class="container text-center">
+              <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+                  <% for (let i = 0; i < nutArray.length; i++) { %>
+                    <div class="col"><li><%= nutArray[i] %></li></div>
+                  <% } %>
+              </div>
+            </div>
+          </ul>
+        </div>
+        
+      </div>
+      <div class="ingr-container">
+        <h5>Ingredients:</h5>
+        <% const ing = ingr %>
+        <%const lines2 = ing.split('\n');%>
+        <ul class="ing-list">
+        <% for (let i = 2; i < lines2.length; i++) { %>
+          <li><%= lines2[i] %></li>
+        <% } %>
+        </ul>
+      </div>
+      
+      <p> <%= steps %></p>
+    </div>
   </div>
 </body>
 </html>

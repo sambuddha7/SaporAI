@@ -526,3 +526,30 @@ select {
 .card2-tags:hover {
   background-color:#63c6ff;
 }
+
+
+/* Gpt output section */
+.result-body {
+  padding: 5%;
+}
+
+.card-n {
+  background: linear-gradient(to bottom, #f7f4d7,#faf1b1);
+
+  margin: 3%;
+  border-radius: 25px;
+  
+}
+.card-n-content {
+  padding: 2%;
+}
+.nut-list {
+  list-style-type: none; 
+  font-size: 1.25rem;
+}
+.nut-list li {
+  margin-bottom: 7%;
+}
+.ing-list {
+  list-style-type: none; 
+}
