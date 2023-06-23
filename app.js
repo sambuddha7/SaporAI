@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
+const _ = require("lodash");
 
 const mongoose = require("mongoose");
 
@@ -64,7 +65,8 @@ const userSchema = new mongoose.Schema({
   gender: String,
   googleId: String,
   preference: String,
-  goal: String
+  goal: String,
+  maintenance: Number
 });
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
@@ -161,6 +163,7 @@ app.get("/login", function(req, res) {
   } else {
     res.render("login", { error: '' });
   }
+
   
 });
 app.get("/signup", function(req, res) {
@@ -215,7 +218,14 @@ app.get("/user", function(req, res) {
         } else if (foundUser.goal == "WeightGain") {
           maintenanceCalories += 100;
         }
-        res.render("user", {userName: foundUser.name, BMR: maintenanceCalories, Weight: weight});
+        foundUser.maintenance = maintenanceCalories;
+        foundUser.save().then(()=> {
+          res.render("user", {userName: foundUser.name, BMR: maintenanceCalories, Weight: weight});
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        // res.render("user", {userName: foundUser.name, BMR: maintenanceCalories, Weight: weight});
       }
     }).catch(function(err) {
       console.log("user error");
@@ -311,16 +321,36 @@ app.post('/login', (req, res, next) => {
 });
 
 
+//GPT SECTION
+async function getCalories(req) {
+  try {
+    let foundUser = await User.findById(req.user.id);
+    if (foundUser) {
+      return Math.floor(foundUser.maintenance / 4);
+    }
+    else {
+      return "300-500"; // or whatever default value you want to use
+    }
+  }
+  catch (err) {
+    console.log(err);
+    return 0; // or whatever default value you want to use
+  }
+}
 app.post("/result-2", async(req, res) => {
   //api calls to be added
   var meal = req.body.meal;
   var ingredients = JSON.parse(req.body.listData);
-  // console.log("Ingredients:", ingredients);
   var calories = req.body.selection;
   if (typeof calories === 'undefined') {
-    calories = "300-500";
+    calories = await getCalories(req);
+    if (meal == 'snack') {
+      calories /= 1.6;
+    }
   }
+  
   const marker = "###SECTION_MARKER###";
+  console.log(calories);
   // var prompt = `Provide a list of 5 ${meal} recipes in the calorie range of ${calories} using the ingredients ${ingredients}`;
   var prompt = `Provide a ${meal} recipe in the calorie range of ${calories} using only the ingredients ${ingredients}, some optional spices, optional garnishing and oils of your choice and in the format:
    Dish Name:
@@ -331,7 +361,7 @@ app.post("/result-2", async(req, res) => {
    ${marker}
    Instructions:`;
 
-  // console.log(prompt);
+  console.log(prompt);
   //api calls
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
@@ -339,38 +369,39 @@ app.post("/result-2", async(req, res) => {
   });
   //handle api response
   result = completion.data.choices[0].message.content;
-  console.log(result);
+  // console.log(result);
   const sections = result.split(marker);
-  var modSection = [];
-  // console.log("0");
-  // console.log(sections[0]);
-  // console.log("1");
 
-  // console.log(sections[1]);
-  // console.log("2");
-
-  // console.log(sections[2]);
-  // console.log("3");
-
-  // console.log(sections[3]);
-
-  for (let i = 0; i < sections.length; i++) {
-    if (sections[i] != "" || sections[i] != '\n') {
-      modSection.push(sections[i]);
-    }
-  }
-  console.log(sections.length);
-  console.log(modSection.length);
 // Extract the nutrition information, ingredients, and recipe steps
   const name = sections[0];
-  const nutritionInfo = modSection[1];
-  const ingredientss = modSection[2];
-  const recipeSteps = modSection[3];
 
+  var recName = name.split(':');
+  recName = recName[1];
+  console.log(recName);
+  recName = _.lowerCase(recName);
+  console.log(recName);
+  res.redirect("/result/" + recName);
 
+});
+app.get("/result/:recName", function(req, res) {
+  console.log(result);
+  const marker = "###SECTION_MARKER###";
+  const sections = result.split(marker);
+  const name = sections[0];
+  var nutritionInfo = sections[1];
+  var ingredientss = sections[2];
+  var recipeSteps = sections[3];
+  if (sections.length > 4) {
+    nutritionInfo = sections[1];
+    ingredientss = sections[3];
+    recipeSteps = sections[5];
+  }
+  // for (let i = 0; i < sections.length; ++i) {
+  //   console.log(i);
+  //   console.log(sections[i]);
+  // }
   res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
 });
-
 app.post("/result-1", async(req, res) => {
   //api calls to be added
   var meal = req.body.meal;
