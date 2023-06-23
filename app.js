@@ -322,41 +322,50 @@ app.post("/result-2", async(req, res) => {
   }
   const marker = "###SECTION_MARKER###";
   // var prompt = `Provide a list of 5 ${meal} recipes in the calorie range of ${calories} using the ingredients ${ingredients}`;
-  var prompt = `Provide a ${meal} recipe in the calorie range of ${calories} using the ingredients ${ingredients} in the following format:
-  Name of dish
-  ${marker}
-  Nutrtional Information
-  ${marker}
-  Ingredients
-  ${marker}
-  Instructions`;
-
+  var prompt = `Provide a ${meal} recipe in the calorie range of ${calories} using only the ingredients ${ingredients}, some optional spices, optional garnishing and oils of your choice and in the format:
+   Dish Name:
+   ${marker}
+   Nutrtional Information:
+   ${marker}
+   Ingredients:
+   ${marker}
+   Instructions:`;
 
   // console.log(prompt);
   //api calls
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
-    messages: [{role:"system", "content" : "You are SaporAI helpful assistant generate healhty meals"},{role: "user", content: prompt}],
+    messages: [{role:"system", "content" : "You will always respond strictly in the format mentioned in the prompt"},{role: "user", content: prompt}],
   });
   //handle api response
   result = completion.data.choices[0].message.content;
   console.log(result);
-  // console.log(result);
   const sections = result.split(marker);
-  // console.log(sections.length);
+  var modSection = [];
+  // console.log("0");
+  // console.log(sections[0]);
+  // console.log("1");
+
+  // console.log(sections[1]);
+  // console.log("2");
+
+  // console.log(sections[2]);
+  // console.log("3");
+
+  // console.log(sections[3]);
+
+  for (let i = 0; i < sections.length; i++) {
+    if (sections[i] != "" || sections[i] != '\n') {
+      modSection.push(sections[i]);
+    }
+  }
+  console.log(sections.length);
+  console.log(modSection.length);
 // Extract the nutrition information, ingredients, and recipe steps
   const name = sections[0];
-
-  const nutritionInfo = sections[1];
-  const ingredientss = sections[3];
-  const recipeSteps = sections[5];
-  console.log("nut:");
-  console.log(sections[1]);
-  console.log("ingr:");
-  console.log(sections[3]);
-  console.log("steps:");
-
-  console.log(sections[5]);
+  const nutritionInfo = modSection[1];
+  const ingredientss = modSection[2];
+  const recipeSteps = modSection[3];
 
 
   res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});

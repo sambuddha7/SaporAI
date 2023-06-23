@@ -2,7 +2,9 @@
 <script src="/result-script.js" defer></script>
   <div class="dashboard-container">
     <div class="result-body">
-      <h3> <%= recipeName %></h3>
+      <!-- <h3> <%= recipeName %></h3> -->
+      <% const recName = recipeName.split(':'); %>
+      <h3><%= recName[1] %></h3>
       <div id="nutr-container" class="card-n">
         <% const nutri = nutrInfo %>
         <%const lines = nutri.split('\n');%>
@@ -17,8 +19,12 @@
         <%  const trimmedLine = nonEmptyLines[i].trim();%>
 
         <%  const [key, value] = trimmedLine.split(':');%>
-        <% var lit = `${key.trim()}: ${value.trim()}`;%>
+        <!-- <% var lit = `${key.trim()}: ${value.trim()}`;%> -->
+        <% lit = trimmedLine %>
+        <% if (lit.substring(0,1) == '-' || lit.substring(0,1) == '*') {%>
         <% lit = lit.substring(1);%>
+        <% }%>
+     
         <% nutArray.push(lit)%>
         <%}%>
         <div class="card-n-content">
@@ -45,8 +51,18 @@
         <% } %>
         </ul>
       </div>
+      <div class="step-container">
+        <h5>Instructions:</h5>
+        <% const step = steps %>
+        <%const lines3 = step.split('\n');%>
+        <ul class="ing-list">
+          <% for (let i = 2; i < lines3.length; i++) { %>
+            <li><%= lines3[i] %></li>
+          <% } %>
+          </ul>
+      </div>
       
-      <p> <%= steps %></p>
+      
     </div>
   </div>
 </body>
