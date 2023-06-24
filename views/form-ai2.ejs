@@ -195,6 +195,7 @@
             itemNumber.textContent = (index + 1) + ". ";
         });
     }
+
     function validateForm() {
         const mealCheckboxes = document.querySelectorAll('input[name="meal"]:checked');
         const listInput = document.getElementById("list");
@@ -206,9 +207,31 @@
         
         if (mealCheckboxes.length === 0) {
             mealError.textContent = "Please select at least one meal option.";
-            return;
+            return false;
         }
+
+        if (list.length < 2) {
+            ingredientError.textContent = "Please add at least 2 ingredients to the list.";
+            return false;
+        }
+
+        return true;
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      // Set the first checkbox as checked by default
+      document.getElementById("breakfast-checkbox").checked = true;
+      // Add "Enter" key event listener to submit the form
+      document.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          const formIsValid = validateForm();
+          if (formIsValid) {
+            document.querySelector(".form-group").submit();
+          }
+        }
+      });
+    });
   </script>
 </head>
 <body>
