@@ -19,7 +19,6 @@
         <%  const trimmedLine = nonEmptyLines[i].trim();%>
 
         <%  const [key, value] = trimmedLine.split(':');%>
-        <!-- <% var lit = `${key.trim()}: ${value.trim()}`;%> -->
         <% lit = trimmedLine %>
         <% if (lit.substring(0,1) == '-' || lit.substring(0,1) == '*') {%>
         <% lit = lit.substring(1);%>

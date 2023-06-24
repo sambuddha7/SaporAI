@@ -1,0 +1,7 @@
+<%- include("partials/user-header") %>
+<h4 style="text-align:center;">Previously looked up recipes:</h4>
+<% for (let i = HistoryArray.length - 1; i >= 0; i--) { %>
+    <div class="dashboard-container">
+        <h4 class="hist-content"> <%= HistoryArray[i][0] %> </h4>
+    </div>
+<% } %>

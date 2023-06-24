@@ -66,7 +66,12 @@ const userSchema = new mongoose.Schema({
   googleId: String,
   preference: String,
   goal: String,
-  maintenance: Number
+  maintenance: Number,
+  todayCalories: { type: Number, default: 0 },
+  recipeHistory: {
+    type: [[String]],
+    default: []
+  }
 });
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
@@ -143,19 +148,6 @@ app.get("/goauth", function(req,res) {
     }).catch(function(err) {
       console.log("goauth error");
     })
-    // User.findOne(req.user.username).then((foundUser) => {
-    //   if (foundUser) {
-    //     console.log(foundUser);
-    //     // res.redirect("/signup-2");
-    //     if (typeof foundUser.age === 'undefined') {
-    //       res.redirect("/signup-2");
-    //     } else {
-    //       res.redirect("/user");
-    //     }
-    //   }
-    // }).catch(function(err) {
-    //   console.log("goauth error");
-    // })
   })
 app.get("/login", function(req, res) {
   if (req.isAuthenticated()) {
@@ -163,8 +155,6 @@ app.get("/login", function(req, res) {
   } else {
     res.render("login", { error: '' });
   }
-
-  
 });
 app.get("/signup", function(req, res) {
   if (req.isAuthenticated()) {
@@ -181,9 +171,7 @@ app.get("/signup-2", function(req, res) {
       res.redirect("/login");
   }
 });
-app.get("/contact", function(req, res) {
-  res.render("home", {testVar: "test"});
-});
+
 app.get("/form-ai1", function(req, res) {
   res.render("form-ai1", {testVar: "test"});
 });
@@ -220,7 +208,7 @@ app.get("/user", function(req, res) {
         }
         foundUser.maintenance = maintenanceCalories;
         foundUser.save().then(()=> {
-          res.render("user", {userName: foundUser.name, BMR: maintenanceCalories, Weight: weight});
+          res.render("user", {userName: foundUser.name, BMR: maintenanceCalories, Weight: weight, today: foundUser.todayCalories});
         })
         .catch((err) => {
           console.log(err);
@@ -252,6 +240,17 @@ app.get("/result-2", function(req, res) {
 
 app.get("/result-1", function(req, res) {
   res.render("result-1", {result});
+});
+app.get("/recipe-history", function(req, res) {
+  User.findById(req.user.id).then(function(foundUser) {
+    if (foundUser) { 
+      res.render("recipe-history", {HistoryArray: foundUser.recipeHistory});
+    }
+  }).catch(function(err) {
+    console.log(err);
+  })
+
+  
 });
 //signup form post method
 
@@ -400,7 +399,26 @@ app.get("/result/:recName", function(req, res) {
   //   console.log(i);
   //   console.log(sections[i]);
   // }
-  res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
+  var recName = name.split(':');
+  recName = recName[1];
+  User.findById(req.user.id).then((foundUser) => {
+    if (foundUser) {
+      var histArray = foundUser.recipeHistory;
+      var toPush = [recName, nutritionInfo,ingredientss,  recipeSteps];
+      histArray.push(toPush);
+      
+      
+      foundUser.save().then(()=> {
+        res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+  }).catch(function(err) {
+    console.log("user error");
+  })
+  // res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
 });
 app.post("/result-1", async(req, res) => {
   //api calls to be added
