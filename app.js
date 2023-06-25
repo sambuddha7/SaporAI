@@ -376,14 +376,33 @@ app.post("/result-2", async(req, res) => {
 
   var recName = name.split(':');
   recName = recName[1];
-  console.log(recName);
-  recName = _.lowerCase(recName);
-  console.log(recName);
-  res.redirect("/result/" + recName);
+  var nutritionInfo = sections[1];
+  var ingredientss = sections[2];
+  var recipeSteps = sections[3];
+  User.findById(req.user.id).then((foundUser) => {
+    if (foundUser) {
+      var histArray = foundUser.recipeHistory;
+      var toPush = [recName, nutritionInfo, ingredientss, recipeSteps];
+      histArray.push(toPush);
+      foundUser.recipeHistory = histArray;
+      recName = _.kebabCase(recName);
+      
+      foundUser.save().then(()=> {
+        
+        res.redirect("/result/" + recName);
+      })
+      .catch((err) => {
+        console.log("user not found");
+      });
+    }
+  }).catch(function(err) {
+    console.log("user error");
+  })
+  
 
 });
 app.get("/result/:recName", function(req, res) {
-  console.log(result);
+  console.log(req.params.recName);
   const marker = "###SECTION_MARKER###";
   const sections = result.split(marker);
   const name = sections[0];
@@ -395,29 +414,33 @@ app.get("/result/:recName", function(req, res) {
     ingredientss = sections[3];
     recipeSteps = sections[5];
   }
-  // for (let i = 0; i < sections.length; ++i) {
-  //   console.log(i);
-  //   console.log(sections[i]);
-  // }
   var recName = name.split(':');
   recName = recName[1];
+  
+  res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
+});
+app.get("/history/:recName", function(req, res) {
   User.findById(req.user.id).then((foundUser) => {
+    console.log(req.params.recName);
     if (foundUser) {
       var histArray = foundUser.recipeHistory;
-      var toPush = [recName, nutritionInfo,ingredientss,  recipeSteps];
-      histArray.push(toPush);
-      
-      
-      foundUser.save().then(()=> {
-        res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      for (let i = 0; i < histArray.length; i++) {
+        var toMatch = histArray[i][0];
+        toMatch = _.kebabCase(toMatch);
+        var par = req.params.recName;
+        par = _.kebabCase(par);
+        if (toMatch == par) {
+            console.log(histArray[i][1]);
+            res.render("result-2", {recipeName: histArray[i][0], nutrInfo: histArray[i][1], ingr: histArray[i][2], steps: histArray[i][3]});
+            break;
+        } 
+      }
+      res.redirect("user");
     }
   }).catch(function(err) {
     console.log("user error");
   })
+  
   // res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
 });
 app.post("/result-1", async(req, res) => {
