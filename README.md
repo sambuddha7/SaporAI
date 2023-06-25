@@ -17,4 +17,4 @@
     accept both incoming changes
     then same as committing alone
 
-2. When working as a single user git add->commit->push
+2. When working as a single user git add->commit->pushh
