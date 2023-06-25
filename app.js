@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require("express");
+
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const _ = require("lodash");
@@ -24,6 +25,8 @@ const openai = new OpenAIApi(config);
 
 
 const app = express();
+app.locals._ = _;
+
 var result = "";
 
 app.use(session({
@@ -69,6 +72,10 @@ const userSchema = new mongoose.Schema({
   maintenance: Number,
   todayCalories: { type: Number, default: 0 },
   recipeHistory: {
+    type: [[String]],
+    default: []
+  },
+  favorites: {
     type: [[String]],
     default: []
   }
@@ -173,7 +180,11 @@ app.get("/signup-2", function(req, res) {
 });
 
 app.get("/form-ai1", function(req, res) {
-  res.render("form-ai1", {testVar: "test"});
+  if (req.isAuthenticated()) {
+    res.render("form-ai1");
+  } else {
+    res.redirect("login");
+  }
 });
 app.get("/user", function(req, res) {
 
@@ -225,7 +236,11 @@ app.get("/user", function(req, res) {
 });
 
 app.get("/form-ai2", function(req, res) {
-  res.render("form-ai2", {testVar: "test"});
+  if (req.isAuthenticated()) {
+      res.render("form-ai2");
+    } else {
+      res.redirect("login");
+    }
 });
 app.get("/logout", function(req,res) {
   req.logout(function(err) {
@@ -235,11 +250,21 @@ app.get("/logout", function(req,res) {
 });
 
 app.get("/result-2", function(req, res) {
-  res.render("result-2", {result});
+  if (req.isAuthenticated()) {
+
+    res.render("result-2", {result});
+    } else {
+      res.redirect("login");
+    }
 });
 
 app.get("/result-1", function(req, res) {
+  if (req.isAuthenticated()) {
+
   res.render("result-1", {result});
+  } else {
+    res.redirect("login");
+  }
 });
 app.get("/recipe-history", function(req, res) {
   User.findById(req.user.id).then(function(foundUser) {
@@ -319,6 +344,7 @@ app.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
+// favorites section
 
 //GPT SECTION
 async function getCalories(req) {
@@ -402,45 +428,53 @@ app.post("/result-2", async(req, res) => {
 
 });
 app.get("/result/:recName", function(req, res) {
-  console.log(req.params.recName);
-  const marker = "###SECTION_MARKER###";
-  const sections = result.split(marker);
-  const name = sections[0];
-  var nutritionInfo = sections[1];
-  var ingredientss = sections[2];
-  var recipeSteps = sections[3];
-  if (sections.length > 4) {
-    nutritionInfo = sections[1];
-    ingredientss = sections[3];
-    recipeSteps = sections[5];
+  if (req.isAuthenticated()) {
+
+    console.log(req.params.recName);
+    const marker = "###SECTION_MARKER###";
+    const sections = result.split(marker);
+    const name = sections[0];
+    var nutritionInfo = sections[1];
+    var ingredientss = sections[2];
+    var recipeSteps = sections[3];
+    if (sections.length > 4) {
+      nutritionInfo = sections[1];
+      ingredientss = sections[3];
+      recipeSteps = sections[5];
+    }
+    var recName = name.split(':');
+    recName = recName[1];
+    
+    res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
+  } else {
+    res.redirect("login");
   }
-  var recName = name.split(':');
-  recName = recName[1];
-  
-  res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
 });
 app.get("/history/:recName", function(req, res) {
-  User.findById(req.user.id).then((foundUser) => {
-    console.log(req.params.recName);
-    if (foundUser) {
-      var histArray = foundUser.recipeHistory;
-      for (let i = 0; i < histArray.length; i++) {
-        var toMatch = histArray[i][0];
-        toMatch = _.kebabCase(toMatch);
-        var par = req.params.recName;
-        par = _.kebabCase(par);
-        if (toMatch == par) {
-            console.log(histArray[i][1]);
-            res.render("result-2", {recipeName: histArray[i][0], nutrInfo: histArray[i][1], ingr: histArray[i][2], steps: histArray[i][3]});
-            break;
-        } 
+  if (req.isAuthenticated()) {
+
+    User.findById(req.user.id).then((foundUser) => {
+      if (foundUser) {
+        var histArray = foundUser.recipeHistory;
+        for (let i = 0; i < histArray.length; i++) {
+          var toMatch = histArray[i][0];
+          toMatch = _.kebabCase(toMatch);
+          var par = req.params.recName;
+          par = _.kebabCase(par);
+          if (toMatch == par) {
+              console.log(histArray[i][0]);
+              res.render("result-2", {recipeName: histArray[i][0], nutrInfo: histArray[i][1], ingr: histArray[i][2], steps: histArray[i][3]});
+              break;
+          } 
+        }
+        res.redirect("user");
       }
-      res.redirect("user");
-    }
-  }).catch(function(err) {
-    console.log("user error");
-  })
-  
+    }).catch(function(err) {
+      console.log("his error");
+    })
+  } else {
+    res.redirect("../login");
+  }
   // res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
 });
 app.post("/result-1", async(req, res) => {

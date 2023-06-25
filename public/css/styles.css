@@ -443,7 +443,7 @@ select {
 
 .hint1 > span {
   position: absolute;
-  top: 7px;
+  top: 3px;
   right: 12px;
 }
 
@@ -483,7 +483,7 @@ select {
 
 .hint2 > span {
   position: absolute;
-  top: 7px;
+  top: 3px;
   right: 12px;
 }
 
@@ -558,7 +558,16 @@ select {
 }
 
 /* recipe history */
+.history-container {
+  background-color: #fff;
+  border-width: 5px;
+  border: 1px solid;
+  border:#bcd3f7 1px solid;
+}
+
+
 .hist-content {
-  margin: 5%;
+  margin: 0 5%;
   padding: 2%;
+  
 }

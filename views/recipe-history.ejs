@@ -1,7 +1,22 @@
 <%- include("partials/user-header") %>
-<h4 style="text-align:center;">Previously looked up recipes:</h4>
+<h4 style="text-align: left; margin: 3%; margin-left:5.5%">Previously looked up recipes:</h4>
 <% for (let i = HistoryArray.length - 1; i >= 0; i--) { %>
-    <div class="dashboard-container">
-        <h4 class="hist-content"> <%= HistoryArray[i][0] %> </h4>
+    <div class="history-container hist-content">
+        <h4> <%= HistoryArray[i][0] %> </h4>
+        <% var trun = _.truncate(HistoryArray[i][1], {
+            'length': 160,
+            'separator': '\n'
+          });%>
+          <% var trun2 = _.truncate(HistoryArray[i][2], {
+            'length': 100,
+            'separator': '\n'
+          });%>
+
+        <p><%= trun %></p>
+        <p><%= trun2 %></p>
+        <% hrefValue = "/history/" + HistoryArray[i][0]; %>
+
+        <a href="<%= hrefValue%>" class="fa-solid fa-arrow-up-right-from-square "></a>
+        <button data-recipe-id="">Favorite</button>
     </div>
 <% } %>
