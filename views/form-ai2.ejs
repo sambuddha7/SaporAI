@@ -2,7 +2,7 @@
 
   <div class="form-container mt-5">
     <div class="card px-4 py-5">
-      <h2 class="mb-4 ai2-header" style="text-align: left;">Ingredient Wizard</h2>
+      <h2 class="mb-4 ai2-header" style="text-align: left;">Ingredient Wizard 🥗</h2>
       <p style="color:#a3a3a3;">Make most of the ingredients available to you!</p>
       <form id="question-form" action="/result-2" method="POST">
         <!-- Other form elements go here -->
@@ -23,7 +23,7 @@
               <small style="color:#a3a3a3">Input at least 2 ingredients for the best results!</small>
               <ul class="list"></ul>
               <input type="text" id="list" placeholder="Enter an item">
-              <button type="button" class="btn btn-primary" onclick="addItem()">Add</button>
+              <button type="button" class="btn btn-success" onclick="addItem()">Add</button>
               <div id="ingredient-error" class="error-message"></div>
           </div>
           <div class="checkbox-group">
@@ -40,7 +40,7 @@
           <div class="checkbox-group">
             <input type="hidden" id="list-data" name="listData" value="">
         </div>
-          <button type="submit" class="btn btn-outline-primary sub" onclick="return validateForm()">Submit</button>
+          <button type="submit" class="btn btn-outline-success sub" onclick="return validateForm()">Submit</button>
       </form>
     </div>
   </div>

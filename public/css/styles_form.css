@@ -71,10 +71,10 @@ body {
     background-color: #fff;
   }
   .ai2-header {
-    color:#0b75b3;
+    color:#038007;
   }
   .checkbox-group input[type="checkbox"]:checked + label:before {
-    background-color: #0b75b3;
+    background-color: #038007;
   }
 
   .number-input {
