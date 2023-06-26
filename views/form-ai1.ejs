@@ -1,285 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Question Form</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-image: radial-gradient( circle 369px at -2.9% 12.9%,  rgba(247,234,163,1) 0%, rgba(236,180,238,0.56) 46.4%, rgba(163,203,247,1) 100.7% );
-    }
-    .container {
-      max-width: 600px;
-      margin: 40px auto;
-      background-color: #fff;
-      border-radius: 10px;
-      padding: 40px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
-    }
-
-    h2 {
-      font-size: 32px;
-      margin-top: 0;
-      margin-bottom: 20px;
-      text-align: center;
-      color: #333;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-      font-size: 18px;
-      color: #333;
-    }
-
-    .checkbox-group {
-      margin-bottom: 20px;
-    }
-
-    .checkbox-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 15px;
-    }
-
-    .checkbox-group input[type="checkbox"] {
-      display: none;
-    }
-
-    .checkbox-group input[type="checkbox"] + label:before {
-      content: "";
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      margin-right: 8px;
-      border: 2px solid #ccc;
-      border-radius: 4px;
-      vertical-align: middle;
-      background-color: #fff;
-    }
-
-    .checkbox-group input[type="checkbox"]:checked + label:before {
-      background-color: #4CAF50;
-      border-color: #4CAF50;
-    }
-
-    .btn {
-      background-color: #4CAF50;
-      color: #fff;
-      border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-
-    .btn:hover {
-      background-color: #45a049;
-    }
-
-    .list {
-        list-style-type: none;
-        padding: 0;
-        margin-top: 10px;
-    }
-
-    .list li {
-        display: flex;
-        align-items: center;
-        margin-bottom: 5px;
-    }
-
-    .list li span {
-        margin-right: 10px;
-        font-size: 15px;
-    }
-
-    .list li button {
-        background: transparent;
-        border: none;
-        color: red;
-        cursor: pointer;
-        font-size: 15px;
-    }
-
-    .optional {
-        font-size: 0.8em;
-        color: red;
-        vertical-align: super;
-        margin-left: 0.2em;
-    }
-
-    input[type="number"] {
-        width: 10%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        margin-bottom: 20px;
-        margin-bottom: 0;
-    }
-
-    select {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 15px;
-        margin-top: 5px;
-    }
-
-    .error-message {
-        color: red;
-        font-size: 14px;
-    }
-
-    .macro-inputs {
-        display: flex;
-        align-items: center;
-        margin-bottom: 8px;
-    }
-
-    .macro-inputs label {
-        font-size: 15px;
-        margin-right: 5px;
-    }
-
-    .macro-inputs span {
-        font-size: 15px;
-        margin-right: 10px;
-        margin-left: 5px;
-    }
-
-  </style>
-  <script>
-    function handleCustomCheckboxChange(checkbox) {
-        const checkboxes = document.getElementsByName(checkbox.name);
-        for (let i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].id !== checkbox.id) {
-                checkboxes[i].checked = false;
-            }
-        }
-    }
-
-
-    function addItem() {
-        var listInput = document.getElementById("list-input");
-        var listItem = document.createElement("li");
-
-        var itemNumber = document.createElement("span");
-        itemNumber.textContent = document.querySelectorAll(".list li").length + 1 + ". ";
-
-        var itemText = document.createElement("span");
-        itemText.textContent = listInput.value;
-
-        var removeButton = document.createElement("button");
-        removeButton.innerHTML = "&#10060;"; // Cross symbol
-        removeButton.addEventListener("click", function() {
-            listItem.parentNode.removeChild(listItem);
-            updateItemNumbers();
-        });
-
-        listItem.appendChild(itemNumber);
-        listItem.appendChild(itemText);
-        listItem.appendChild(removeButton);
-        document.querySelector(".list").appendChild(listItem);
-        listInput.value = "";
-
-        updateItemNumbers();
-    }
-
-    function updateItemNumbers() {
-        var listItems = document.querySelectorAll(".list li");
-        listItems.forEach(function(item, index) {
-            var itemNumber = item.querySelector("span:first-child");
-            itemNumber.textContent = (index + 1) + ". ";
-        });
-    }
-    function validateForm() {
-        const mealCheckboxes = document.querySelectorAll('input[name="meal"]:checked');
-        const listInput = document.getElementById("list-input");
-        const mealError = document.getElementById("meal-error");
-        const ingredientError = document.getElementById("ingredient-error");
-        
-        mealError.textContent = "";
-        ingredientError.textContent = "";
-        
-        if (mealCheckboxes.length === 0) {
-            mealError.textContent = "Please select at least one meal option.";
-            return false;
-        }
-        if (list.length < 2) {
-            ingredientError.textContent = "Please add at least 2 ingredients to the list.";
-            return false;
-        }
-        return true;
-    }
-    document.addEventListener("DOMContentLoaded", function() {
-      // Set the first checkbox as checked by default
-      document.getElementById("breakfast-checkbox").checked = true;
-      // Add "Enter" key event listener to submit the form
-      document.addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          const formIsValid = validateForm();
-          if (formIsValid) {
-            document.querySelector(".form-group").submit();
-          }
-        }
-      });
-    });
-  </script>
+  <!-- Add Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/styles_form1.css">
+  <script src="/script_form.js" defer></script>
 </head>
 <body>
-  <div class="container">
-    <form class = "form-group" action = "/result-1" method = "POST">
-      <h2>Let's get to cooking!</h2>
-        <div class="checkbox-group">
-            <label>What meal would you like to eat?</label>
-            <input type="checkbox" id="breakfast-checkbox" name="meal" value="breakfast" onclick="return handleCustomCheckboxChange(this)">
-            <label for="breakfast-checkbox">Breakfast</label>
-            <input type="checkbox" id="lunch-checkbox" name="meal" value="lunch" onclick="return handleCustomCheckboxChange(this)">
-            <label for="lunch-checkbox">Lunch</label>
-            <input type="checkbox" id="dinner-checkbox" name="meal" value="dinner" onclick="return handleCustomCheckboxChange(this)">
-            <label for="dinner-checkbox">Dinner</label>
-            <input type="checkbox" id="smoothie-checkbox" name="meal" value="smoothie" onclick="return handleCustomCheckboxChange(this)">
-            <label for="smoothie-checkbox">Smoothie/protein shakes</label>
-            <div id="meal-error" class="error-message"></div>
+  <div class="container mt-5">
+    <div class="card px-4 py-5">
+      <h2 class="text-center mb-4">Lets get to cooking!</h2>
+      <form class = "form-group" action = "/result-1" method = "POST">
+          <div class="checkbox-group">
+              <label>What meal would you like to eat?</label>
+              <input type="checkbox" id="breakfast-checkbox" name="meal" value="breakfast" onclick="return handleCustomCheckboxChange(this)">
+              <label for="breakfast-checkbox">Breakfast</label>
+              <input type="checkbox" id="lunch-checkbox" name="meal" value="lunch" onclick="return handleCustomCheckboxChange(this)">
+              <label for="lunch-checkbox">Lunch</label>
+              <input type="checkbox" id="dinner-checkbox" name="meal" value="dinner" onclick="return handleCustomCheckboxChange(this)">
+              <label for="dinner-checkbox">Dinner</label>
+              <input type="checkbox" id="smoothie-checkbox" name="meal" value="smoothie" onclick="return handleCustomCheckboxChange(this)">
+              <label for="smoothie-checkbox">Smoothie/protein shakes</label>
+              <div id="meal-error" class="error-message"></div>
+          </div>
+          <div class="checkbox-group">
+            <label for="calories">How many calories do you want to consume?</label>
+            <input type="number" id="calories" name="selection" pattern="\d+(?:-\d+)?" required min="0">
         </div>
-        <div class="checkbox-group">
-          <label for="calories">How many calories do you want to consume?</label>
-          <input type="number" id="calories" name="selection" pattern="\d+(?:-\d+)?" required>
-      </div>
-        <div class="checkbox-group">
-            <label>Meal type</label>
-            <input type="checkbox" id="savoury" name="type" value="savoury" onclick="return handleCustomCheckboxChange(this)">
-            <label for="savoury">Savoury</label>
-            <input type="checkbox" id="sweet" name="type" value="sweet" onclick="return handleCustomCheckboxChange(this)">
-            <label for="sweet">Sweet</label>
-            <div id="meal-error" class="error-message"></div>
-        </div>
-        <div class="checkbox-group">
-            <label>Macros preference (in grams)<sup class="optional">*optional</sup></label>
-            <div class="macro-inputs">
-                <label for="proteins">Proteins:</label>
-                <input type="number" id="proteins" name="proteins" placeholder="0">
-                <span>g</span>
-            </div>
-            <div class="macro-inputs">
-                <label for="carbs">Carbs:</label>
-                <input type="number" id="carbs" name="carbs" placeholder="0">
-                <span>g</span>
-            </div>
-            <div class="macro-inputs">
-                <label for="fats">Fats:</label>
-                <input type="number" id="fats" name="fats" placeholder="0">
-                <span>g</span>
-            </div>
-        </div>
-        <button type="submit" class="btn" onclick="return validateForm()">Submit</button>
-    </form>
+          <div class="checkbox-group">
+              <label>Meal type</label>
+              <input type="checkbox" id="savoury" name="type" value="savoury" onclick="return handleCustomCheckboxChange(this)">
+              <label for="savoury">Savoury</label>
+              <input type="checkbox" id="sweet" name="type" value="sweet" onclick="return handleCustomCheckboxChange(this)">
+              <label for="sweet">Sweet</label>
+              <div id="meal-error" class="error-message"></div>
+          </div>
+          <div class="checkbox-group">
+              <label>Macros preference (in grams)<sup class="optional">*optional</sup></label>
+              <div class="macro-inputs">
+                  <label for="proteins">Proteins:</label>
+                  <input type="number" id="proteins" name="proteins" placeholder="0" min="0">
+                  <span>g</span>
+              </div>
+              <div class="macro-inputs">
+                  <label for="carbs">Carbs:</label>
+                  <input type="number" id="carbs" name="carbs" placeholder="0" min="0">
+                  <span>g</span>
+              </div>
+              <div class="macro-inputs">
+                  <label for="fats">Fats:</label>
+                  <input type="number" id="fats" name="fats" placeholder="0" min="0">
+                  <span>g</span>
+              </div>
+          </div>
+          <button type="submit" class="btn" onclick="return validateForm()">Submit</button>
+      </form>
+    </div>
   </div>
 </body>
 </html>
