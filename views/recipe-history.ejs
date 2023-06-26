@@ -1,5 +1,9 @@
 <%- include("partials/user-header") %>
 <h4 style="text-align: left; margin: 3%; margin-left:5.5%">Previously looked up recipes:</h4>
+
+<% var recipesPerPage = 6; %>
+<% var totalPages = Math.ceil(HistoryArray.length / recipesPerPage); %>
+
 <% for (let i = HistoryArray.length - 1; i >= 0; i--) { %>
     <div class="history-container hist-content">
         <h4> <%= HistoryArray[i][0] %> </h4>

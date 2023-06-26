@@ -10,31 +10,34 @@ var list = [];
 function addItem() {
     var listInput = document.getElementById("list");
     var listItem = document.createElement("li");
+    console.log(listInput.value);
+    if (listInput.value != '') {
 
-    var itemNumber = document.createElement("span");
-    itemNumber.textContent = document.querySelectorAll(".list li").length + 1 + ". ";
+        var itemNumber = document.createElement("span");
+        itemNumber.textContent = document.querySelectorAll(".list li").length + 1 + ". ";
 
-    var itemText = document.createElement("span");
-    itemText.textContent = listInput.value;
+        var itemText = document.createElement("span");
+        itemText.textContent = listInput.value;
 
-    var removeButton = document.createElement("button");
-    removeButton.innerHTML = "&#10060;"; // Cross symbol
-    removeButton.addEventListener("click", function() {
-        var indexToRemove = Array.prototype.indexOf.call(listItem.parentNode.children, listItem);
-        listItem.parentNode.removeChild(listItem);
-        list.splice(indexToRemove, 1); // Remove the item from the list array
+        var removeButton = document.createElement("button");
+        removeButton.innerHTML = "&#10060;"; // Cross symbol
+        removeButton.addEventListener("click", function() {
+            var indexToRemove = Array.prototype.indexOf.call(listItem.parentNode.children, listItem);
+            listItem.parentNode.removeChild(listItem);
+            list.splice(indexToRemove, 1); // Remove the item from the list array
+            updateItemNumbers();
+            document.getElementById("list-data").value = JSON.stringify(list);
+        });
+        listItem.appendChild(itemNumber);
+        listItem.appendChild(itemText);
+        listItem.appendChild(removeButton);
+        document.querySelector(".list").appendChild(listItem);
+        list.push(listInput.value);
+        listInput.value = "";
+
         updateItemNumbers();
         document.getElementById("list-data").value = JSON.stringify(list);
-    });
-    listItem.appendChild(itemNumber);
-    listItem.appendChild(itemText);
-    listItem.appendChild(removeButton);
-    document.querySelector(".list").appendChild(listItem);
-    list.push(listInput.value);
-    listInput.value = "";
-
-    updateItemNumbers();
-    document.getElementById("list-data").value = JSON.stringify(list);
+    }
 }
 
 function updateItemNumbers() {

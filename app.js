@@ -70,7 +70,6 @@ const userSchema = new mongoose.Schema({
   preference: String,
   goal: String,
   maintenance: Number,
-  todayCalories: { type: Number, default: 0 },
   recipeHistory: {
     type: [[String]],
     default: []
@@ -219,7 +218,7 @@ app.get("/user", function(req, res) {
         }
         foundUser.maintenance = maintenanceCalories;
         foundUser.save().then(()=> {
-          res.render("user", {userName: foundUser.name, BMR: maintenanceCalories, Weight: weight, today: foundUser.todayCalories});
+          res.render("user", {userName: foundUser.name, BMR: maintenanceCalories, Weight: weight, gener: foundUser.recipeHistory.length});
         })
         .catch((err) => {
           console.log(err);
