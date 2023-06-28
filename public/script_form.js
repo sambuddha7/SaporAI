@@ -66,7 +66,6 @@ function validateForm() {
         ingredientError.textContent = "Please add at least 2 ingredients to the list.";
         return false;
     }
-
     return true;
 }
 
@@ -85,3 +84,40 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 });
+
+async function submitForm(event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+  
+    if (!validateForm()) {
+      return;
+    }
+  
+    // Show the loading page
+    /*fetch("partials/transition")
+      .then(response => response.text())
+      .then(content => {
+        document.getElementById('loader').innerHTML = content;
+      })
+      .catch(error => {
+        console.error('Error fetching loading content:', error);
+      });*/  
+    // Collect form data
+    const meal = document.querySelector('input[name="meal"]:checked').value;
+    const ingredients = document.getElementById('list-data').value;
+    const calories = document.getElementById('calories').value;
+  
+    // Make a POST request using the Fetch API
+    const response = await fetch('/result-2', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ meal, ingredients, calories })
+    });
+  
+    // Get the response data as JSON
+    const data = await response.json();
+  
+    // Redirect to the result page
+    window.location.href = `/result/${data.recName}`;
+  }

@@ -185,6 +185,15 @@ app.get("/form-ai1", function(req, res) {
     res.redirect("login");
   }
 });
+
+app.get("/transition", function(req, res) {
+  if (req.isAuthenticated()) {
+    res.render("transition");
+  } else {
+    res.render("login");
+  }
+});
+
 app.get("/user", function(req, res) {
 
   if (req.isAuthenticated()) {
@@ -361,18 +370,24 @@ async function getCalories(req) {
     return 0; // or whatever default value you want to use
   }
 }
-app.post("/result-2", async(req, res) => {
-  //api calls to be added
-  var meal = req.body.meal;
-  var ingredients = JSON.parse(req.body.listData);
-  var calories = req.body.selection;
+var meal;
+var ingredients;
+var calories;
+app.post("/transition", async (req, res) => {
+  console.log("hello reached here");
+  meal = req.body.meal;
+  ingredients = JSON.parse(req.body.listData);
+  calories = req.body.selection;
   if (typeof calories === 'undefined') {
     calories = await getCalories(req);
     if (meal == 'snack') {
       calories /= 1.6;
     }
   }
-  
+  res.redirect("/transition");
+});
+app.post("/result-2", async(req, res) => {
+  //api calls to be added
   const marker = "###SECTION_MARKER###";
   console.log(calories);
   // var prompt = `Provide a list of 5 ${meal} recipes in the calorie range of ${calories} using the ingredients ${ingredients}`;
@@ -413,7 +428,7 @@ app.post("/result-2", async(req, res) => {
       recName = _.kebabCase(recName);
       
       foundUser.save().then(()=> {
-        
+        res.json({ recName: _.kebabCase(recName) });
         res.redirect("/result/" + recName);
       })
       .catch((err) => {
@@ -423,9 +438,8 @@ app.post("/result-2", async(req, res) => {
   }).catch(function(err) {
     console.log("user error");
   })
-  
-
 });
+
 app.get("/result/:recName", function(req, res) {
   if (req.isAuthenticated()) {
 
@@ -443,7 +457,7 @@ app.get("/result/:recName", function(req, res) {
     }
     var recName = name.split(':');
     recName = recName[1];
-    
+    console.log("reached");
     res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
   } else {
     res.redirect("login");
