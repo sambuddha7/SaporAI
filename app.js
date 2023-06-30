@@ -356,6 +356,36 @@ app.post('/login', (req, res, next) => {
 // favorites section
 
 //GPT SECTION
+async function getAllergy(req) {
+  try {
+    let foundUser = await User.findById(req.user.id);
+    if (foundUser) {
+      return foundUser.allergy;
+    }
+    else {
+      return "none"; // or whatever default value you want to use
+    }
+  }
+  catch (err) {
+    console.log(err);
+    return 0; // or whatever default value you want to use
+  }
+}
+async function getPreference(req) {
+  try {
+    let foundUser = await User.findById(req.user.id);
+    if (foundUser) {
+      return foundUser.preference;
+    }
+    else {
+      return "non-vegetarian"; // or whatever default value you want to use
+    }
+  }
+  catch (err) {
+    console.log(err);
+    return 0; // or whatever default value you want to use
+  }
+}
 async function getCalories(req) {
   try {
     let foundUser = await User.findById(req.user.id);
@@ -375,7 +405,6 @@ var meal;
 var ingredients;
 var calories;
 app.post("/transition", async (req, res) => {
-  console.log("hello reached here");
   meal = req.body.meal;
   ingredients = JSON.parse(req.body.listData);
   calories = req.body.selection;
@@ -391,8 +420,11 @@ app.post("/result-2", async(req, res) => {
   //api calls to be added
   const marker = "###SECTION_MARKER###";
   console.log(calories);
+  var allergy = await getAllergy(req);
+  var pref = await getPreference(req);
+
   // var prompt = `Provide a list of 5 ${meal} recipes in the calorie range of ${calories} using the ingredients ${ingredients}`;
-  var prompt = `Provide a ${meal} recipe in the calorie range of ${calories} using only the ingredients ${ingredients}, some optional spices, optional garnishing and oils of your choice and in the format:
+  var prompt = `Provide a ${meal} recipe in the calorie range of ${calories} using only the ingredients ${ingredients}, some optional spices, optional garnishing and oils of your choice. Keep mind of the following diet allergies: ${allergy} . Strict diet preference of ${pref} Respond in the format:
    Dish Name:
    ${marker}
    Nutrtional Information:
@@ -473,7 +505,6 @@ app.get("/result/:recName", function(req, res) {
 });
 app.get("/history/:recName", function(req, res) {
   if (req.isAuthenticated()) {
-
     User.findById(req.user.id).then((foundUser) => {
       if (foundUser) {
         var histArray = foundUser.recipeHistory;
