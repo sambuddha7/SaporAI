@@ -119,5 +119,5 @@ async function submitForm(event) {
     const data = await response.json();
   
     // Redirect to the result page
-    window.location.href = `/result/${data.recName}`;
+    //window.location.href = `/result/${data.recName}`;
   }

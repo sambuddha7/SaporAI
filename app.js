@@ -28,6 +28,7 @@ const app = express();
 app.locals._ = _;
 
 var result = "";
+var image_url;
 
 app.use(session({
   secret: "Meal2Go",
@@ -260,7 +261,7 @@ app.get("/logout", function(req,res) {
 app.get("/result-2", function(req, res) {
   if (req.isAuthenticated()) {
 
-    res.render("result-2", {result});
+    res.render("result-2", {result, image_url});
     } else {
       res.redirect("login");
     }
@@ -419,6 +420,13 @@ app.post("/result-2", async(req, res) => {
   var nutritionInfo = sections[1];
   var ingredientss = sections[2];
   var recipeSteps = sections[3];
+  //image generation
+  const response = await openai.createImage({
+    prompt: recName,
+    n: 1,
+    size: "256x256",
+  });
+  image_url = response.data.data[0].url;
   User.findById(req.user.id).then((foundUser) => {
     if (foundUser) {
       var histArray = foundUser.recipeHistory;
@@ -458,7 +466,7 @@ app.get("/result/:recName", function(req, res) {
     var recName = name.split(':');
     recName = recName[1];
     console.log("reached");
-    res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
+    res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps, image: image_url});
   } else {
     res.redirect("login");
   }

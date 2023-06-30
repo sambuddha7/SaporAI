@@ -544,6 +544,9 @@ select {
 .card-n-content {
   padding: 2%;
 }
+.image-container {
+  text-align: center;
+}
 .nut-list {
   list-style-type: none; 
   font-size: 1.25rem;
