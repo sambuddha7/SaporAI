@@ -260,21 +260,12 @@ app.get("/logout", function(req,res) {
 
 app.get("/result-2", function(req, res) {
   if (req.isAuthenticated()) {
-
-    res.render("result-2", {result, image_url});
+    res.render("result-2", {result});
     } else {
       res.redirect("login");
     }
 });
 
-app.get("/result-1", function(req, res) {
-  if (req.isAuthenticated()) {
-
-  res.render("result-1", {result});
-  } else {
-    res.redirect("login");
-  }
-});
 app.get("/recipe-history", function(req, res) {
   User.findById(req.user.id).then(function(foundUser) {
     if (foundUser) { 
@@ -452,13 +443,7 @@ app.post("/result-2", async(req, res) => {
   var nutritionInfo = sections[1];
   var ingredientss = sections[2];
   var recipeSteps = sections[3];
-  //image generation
-  const response = await openai.createImage({
-    prompt: recName,
-    n: 1,
-    size: "256x256",
-  });
-  image_url = response.data.data[0].url;
+  
   User.findById(req.user.id).then((foundUser) => {
     if (foundUser) {
       var histArray = foundUser.recipeHistory;
@@ -498,17 +483,81 @@ app.get("/result/:recName", function(req, res) {
     var recName = name.split(':');
     recName = recName[1];
     console.log("reached");
-    res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps, image: image_url});
+    res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
   } else {
     res.redirect("login");
   }
 });
+
+app.post("/result-1", async(req, res) => {
+  //api calls to be added
+  const marker = "###SECTION_MARKER###";
+  var allergy = await getAllergy(req);
+  var pref = await getPreference(req);
+  var meal = req.body.meal;
+  var calories = req.body.selection;
+  var type = req.body.type;
+  var diet = req.body.diet;
+  if (typeof calories === 'undefined') {
+    calories = await getCalories(req);
+    if (meal == 'snack') {
+      calories /= 1.6;
+    }
+  }
+  var prompt = `Provide a ${type} ${meal} ${diet} recipe in the calorie range of ${calories}. Keep mind of the following diet allergies: ${allergy} . Strict diet preference of ${pref} Respond in the format:
+  Dish Name:
+  ${marker}
+  Nutrtional Information:
+  ${marker}
+  Ingredients:
+  ${marker}
+  Instructions:`;
+  console.log(prompt);
+  //api calls
+  const completion = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: [{role:"system", "content" : "You will always respond strictly in the format mentioned in the prompt"},{role: "user", content: prompt}],
+  });
+  //handle api response
+  result = completion.data.choices[0].message.content;
+  const sections = result.split(marker);
+
+// Extract the nutrition information, ingredients, and recipe steps
+  const name = sections[0];
+
+  var recName = name.split(':');
+  recName = recName[1];
+  var nutritionInfo = sections[1];
+  var ingredientss = sections[2];
+  var recipeSteps = sections[3];
+  
+  User.findById(req.user.id).then((foundUser) => {
+    if (foundUser) {
+      var histArray = foundUser.recipeHistory;
+      var toPush = [recName, nutritionInfo, ingredientss, recipeSteps];
+      histArray.push(toPush);
+      foundUser.recipeHistory = histArray;
+      recName = _.kebabCase(recName);
+      
+      foundUser.save().then(()=> {
+        // res.json({ recName: _.kebabCase(recName) });
+        res.redirect("/result/" + recName);
+      })
+      .catch((err) => {
+        console.log("user not found");
+      });
+    }
+  }).catch(function(err) {
+    console.log("user error");
+  })
+});
+
 app.get("/history/:recName", function(req, res) {
   if (req.isAuthenticated()) {
     User.findById(req.user.id).then((foundUser) => {
       if (foundUser) {
         var histArray = foundUser.recipeHistory;
-        for (let i = 0; i < histArray.length; i++) {
+        for (let i = histArray.length - 1; i >= 0; i--) {
           var toMatch = histArray[i][0];
           toMatch = _.kebabCase(toMatch);
           var par = req.params.recName;
@@ -528,26 +577,6 @@ app.get("/history/:recName", function(req, res) {
     res.redirect("../login");
   }
   // res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
-});
-app.post("/result-1", async(req, res) => {
-  //api calls to be added
-  var meal = req.body.meal;
-  var calories = req.body.selection;
-  var type = req.body.type;
-  var proteins = req.body.proteins;
-  var carbs = req.body.carbs;
-  var fats = req.body.fats;
-  var prompt = `Provide a list of ${type} ${meal} recipes in the calorie range of ${calories}, with the macros proteins: ${proteins} grams, carbs: ${carbs} grams, fats:${fats} grams`;
-  console.log(prompt);
-  //api calls
-  const completion = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
-    messages: [ {role:"system", "content" : "You are SaporAI helpful assistant generate healhty meals"},
-      {role: "user", content: prompt}],
-  });
-  //handle api response
-  result = completion.data.choices[0].message.content;
-  res.redirect("/result-1");
 });
 
 //port stuff
