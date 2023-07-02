@@ -195,6 +195,14 @@ app.get("/transition", function(req, res) {
   }
 });
 
+app.get("/transition1", function(req, res) {
+  if (req.isAuthenticated()) {
+    res.render("transition1");
+  } else {
+    res.render("login");
+  }
+});
+
 app.get("/user", function(req, res) {
 
   if (req.isAuthenticated()) {
@@ -395,7 +403,11 @@ async function getCalories(req) {
 var meal;
 var ingredients;
 var calories;
+var allergy;
+var pref;
 app.post("/transition", async (req, res) => {
+  allergy = await getAllergy(req);
+  pref = await getPreference(req);
   meal = req.body.meal;
   ingredients = JSON.parse(req.body.listData);
   calories = req.body.selection;
@@ -407,13 +419,32 @@ app.post("/transition", async (req, res) => {
   }
   res.redirect("/transition");
 });
+
+var meal;
+var calories;
+var type;
+var diet;
+app.post("/transition1", async (req, res) => {
+  allergy = await getAllergy(req);
+  pref = await getPreference(req);
+  meal = req.body.meal;
+  calories = req.body.selection;
+  type = req.body.type;
+  diet = req.body.diet;
+  if (typeof calories === 'undefined') {
+    calories = await getCalories(req);
+    if (meal == 'snack') {
+      calories /= 1.6;
+    }
+  }
+  res.redirect("/transition1");
+});
+
+
 app.post("/result-2", async(req, res) => {
   //api calls to be added
   const marker = "###SECTION_MARKER###";
   console.log(calories);
-  var allergy = await getAllergy(req);
-  var pref = await getPreference(req);
-
   // var prompt = `Provide a list of 5 ${meal} recipes in the calorie range of ${calories} using the ingredients ${ingredients}`;
   var prompt = `Provide a ${meal} recipe in the calorie range of ${calories} using only the ingredients ${ingredients}, some optional spices, optional garnishing and oils of your choice. Keep mind of the following diet allergies: ${allergy} . Strict diet preference of ${pref} Respond in the format:
    Dish Name:
@@ -443,7 +474,6 @@ app.post("/result-2", async(req, res) => {
   var nutritionInfo = sections[1];
   var ingredientss = sections[2];
   var recipeSteps = sections[3];
-  
   User.findById(req.user.id).then((foundUser) => {
     if (foundUser) {
       var histArray = foundUser.recipeHistory;
@@ -483,7 +513,7 @@ app.get("/result/:recName", function(req, res) {
     var recName = name.split(':');
     recName = recName[1];
     console.log("reached");
-    res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
+    res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps, image:image_url});
   } else {
     res.redirect("login");
   }
@@ -492,18 +522,6 @@ app.get("/result/:recName", function(req, res) {
 app.post("/result-1", async(req, res) => {
   //api calls to be added
   const marker = "###SECTION_MARKER###";
-  var allergy = await getAllergy(req);
-  var pref = await getPreference(req);
-  var meal = req.body.meal;
-  var calories = req.body.selection;
-  var type = req.body.type;
-  var diet = req.body.diet;
-  if (typeof calories === 'undefined') {
-    calories = await getCalories(req);
-    if (meal == 'snack') {
-      calories /= 1.6;
-    }
-  }
   var prompt = `Provide a ${type} ${meal} ${diet} recipe in the calorie range of ${calories}. Keep mind of the following diet allergies: ${allergy} . Strict diet preference of ${pref} Respond in the format:
   Dish Name:
   ${marker}
@@ -540,7 +558,7 @@ app.post("/result-1", async(req, res) => {
       recName = _.kebabCase(recName);
       
       foundUser.save().then(()=> {
-        // res.json({ recName: _.kebabCase(recName) });
+        res.json({ recName: _.kebabCase(recName) });
         res.redirect("/result/" + recName);
       })
       .catch((err) => {
