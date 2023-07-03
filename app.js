@@ -132,7 +132,12 @@ function (accessToken, refreshToken, profile, cb) {
 
 //get functions
 app.get("/", function(request, response) {
-  response.render("home", {testVar: "test"});
+  if (request.isAuthenticated()) {
+    response.redirect("/user");
+  } else {
+    response.render("home");
+  }
+  
 });
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
 app.get('/auth/google/signup-2', 
