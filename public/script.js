@@ -48,6 +48,19 @@ confirmInput.addEventListener('input', () => {
     }
   });
 
+const error2Input = document.getElementById('passwordLengthError');
+passwordInput.addEventListener('input', () => {
+  const password = passwordInput.value;
+  const confirmPassword = confirmInput.value;
+  const nextButton = document.getElementById('nextid')
+  if (password.length < 8) {
+    passwordLengthError.style.display = 'block';
+    nextButton.disabled = true
+  } else {
+    passwordLengthError.style.display = 'none';
+    nextButton.disabled = false;
+  }
+});
 
 
 
