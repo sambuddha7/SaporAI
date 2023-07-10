@@ -220,6 +220,7 @@ footer p {
 .nav-btn {
   padding: 10%;
 }
+
 @media (max-width:1096px) {
   #signup {
     padding: 50% 0;
