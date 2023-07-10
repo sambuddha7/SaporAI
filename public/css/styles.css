@@ -7,7 +7,7 @@ body {
 .navbar {
   background-color: #fff;
   border-bottom: 1px solid #e9ecef;
-  padding: 0.5% 1.5%;
+  padding: 0.5% 3.5%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,8 +16,13 @@ body {
 
 /* Style the logo in the navigation bar */
 .navbar-brand {
-  font-size: 30px;
+  font-size: 3rem;
   font-weight: bold;
+}
+#login {
+  font-size: 1.75rem;
+  color: white;
+  font-weight: 350;
 }
 
 /* Style the active link in the navigation bar */
@@ -212,6 +217,9 @@ footer p {
   background-size: cover;
   background-color: #f2f2f2;
 }
+.nav-btn {
+  padding: 10%;
+}
 @media (max-width:1096px) {
   #signup {
     padding: 50% 0;
@@ -227,15 +235,16 @@ footer p {
     margin-bottom: 6%;
     margin-top: 3%;
   }
-  .navbar {
-    padding: 5% 2%;
+  #cta h2 {
+    font-size: 3.5rem;
   }
-  .navbar-brand {
-    font-size: 3rem;
+  #cta p {
+    font-size: 2rem;
   }
-  #login {
-    font-size: 3rem;
+  #cta .intro-button {
+    font-size: 2rem;
   }
+  
 
 }
 
