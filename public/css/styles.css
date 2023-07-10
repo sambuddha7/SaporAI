@@ -11,11 +11,12 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  
 }
 
 /* Style the logo in the navigation bar */
 .navbar-brand {
-  font-size: 1.5rem;
+  font-size: 30px;
   font-weight: bold;
 }
 
@@ -211,22 +212,30 @@ footer p {
   background-size: cover;
   background-color: #f2f2f2;
 }
-@media (max-width:1000px) {
+@media (max-width:1096px) {
   #signup {
     padding: 50% 0;
   }
   #header h1 {
-    font-size: 4rem;
+    font-size: 5rem;
   }
   #header p {
-    font-size: 2rem;
+    font-size: 3rem;
   }
   #header .intro-button {
     font-size: 3rem;
     margin-bottom: 6%;
     margin-top: 3%;
   }
-  
+  .navbar {
+    padding: 5% 2%;
+  }
+  .navbar-brand {
+    font-size: 3rem;
+  }
+  #login {
+    font-size: 3rem;
+  }
 
 }
 
