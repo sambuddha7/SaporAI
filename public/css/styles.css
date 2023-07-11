@@ -232,9 +232,6 @@ footer p {
 }
 
 @media (max-width:1096px) {
-  #signup {
-    padding: 50% 0;
-  }
   #header h1 {
     font-size: 5rem;
   }
