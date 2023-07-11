@@ -231,36 +231,13 @@ footer p {
   padding: 10%;
 }
 
-@media (max-width:1096px) {
-  #header h1 {
-    font-size: 5rem;
-  }
-  #header p {
-    font-size: 3rem;
-  }
-  #header .intro-button {
-    font-size: 3rem;
-    margin-bottom: 6%;
-    margin-top: 3%;
-  }
-  #cta h2 {
-    font-size: 3.5rem;
-  }
-  #cta p {
-    font-size: 2rem;
-  }
-  #cta .intro-button {
-    font-size: 2rem;
-  }
-  
 
-}
 
 
 .card {
   margin: 0 auto;
   margin-top: -20%;
-  max-width:500px;
+  width:500px;
   padding: .8rem; 
   border-radius:.5rem;
   display: none;
@@ -644,4 +621,71 @@ select {
   margin: 0 5%;
   padding: 2%;
   
+}
+#google-img {
+  height: 15px;
+}
+
+/* phone adjustments */
+@media (max-width:1096px) {
+  #header h1 {
+    font-size: 5rem;
+  }
+  #header p {
+    font-size: 3rem;
+  }
+  #header .intro-button {
+    font-size: 3rem;
+    margin-bottom: 6%;
+    margin-top: 3%;
+  }
+  #cta h2 {
+    font-size: 3.5rem;
+  }
+  #cta p {
+    font-size: 2rem;
+  }
+  #cta .intro-button {
+    font-size: 2rem;
+  }
+  
+  /* form login section */
+  .card {
+    width: 85%;
+  }
+  .step-title {
+    font-size: 2.5rem;
+  }
+  .form-group > label {
+    font-size: 1.5rem;
+  }
+  .form-group {
+    font-size: 1.5rem;
+  }
+  #email, #password {
+    font-size: 1.5rem;
+  }
+  .btnn {
+    height: 4rem;
+    width: 12rem;
+  }
+  .btn-login {
+    font-size: 2rem;
+  }
+  .small-form-text {
+    font-size: 1.2rem;
+  }
+  .p-form-text {
+    font-size: 1.5rem;
+  }
+  #height {
+    font-size: 1.5rem;
+  }
+  #google-img {
+    height: 35px;
+  }
+  .google-text {
+    font-size:1.5rem;
+  }
+
 }

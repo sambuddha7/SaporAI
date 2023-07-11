@@ -13,13 +13,13 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
             <small style="color: red;"><%= error %></small>
-            <button class="btn btnn btn-outline-secondary" type="submit">Login</button>
+            <button class="btn btnn btn-login btn-outline-secondary" type="submit">Login</button>
             
         </div>
         <hr>
             <div class="card-body" style="text-align: center;">
-              <a class="btn btn-block button-link" href="/auth/google" role="button">
-                <small><img style="height: 15px;"src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png"></small>
+              <a class="btn btnn btn-block button-link google-text" href="/auth/google" role="button">
+                <small ><img id="google-img"src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png"></small>
                 Continue with Google
               </a>
             </div>
