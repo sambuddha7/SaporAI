@@ -84,6 +84,7 @@ body {
 .sliding-image {
   animation: slideInRight 1s ease-in-out;
 }
+@media (min-width:1096px) {
 
 @keyframes slideInLeft {
   0% {
@@ -106,6 +107,8 @@ body {
     opacity: 1;
   }
 }
+}
+
 
 /* Styles for Features Section */
 #features {
