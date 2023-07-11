@@ -1,7 +1,9 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #f3f6fd;
+    display:flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
   .form-container {
     max-width: 600px;
@@ -152,6 +154,7 @@ body {
   }
   /* footer */
 footer {
+    margin-top: auto;
     background-color: #333;
     color: #fff;
     padding: 30px 0;

@@ -1,6 +1,9 @@
 /* Set the background color of the body */
 body {
   background-color: #f8f9fa;
+  display:flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* Style the navigation bar */
@@ -193,6 +196,7 @@ footer {
     color: #fff;
     padding: 30px 0;
     text-align: center;
+    margin-top: auto;
 }
 
 footer p {
