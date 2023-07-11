@@ -221,6 +221,9 @@ footer p {
   background-size: cover;
   background-color: #f2f2f2;
 }
+.sign-body {
+  background-color:#f2f2f2;
+}
 .nav-btn {
   padding: 10%;
 }
