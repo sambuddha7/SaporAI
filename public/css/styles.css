@@ -28,15 +28,9 @@ body {
   font-weight: 350;
 }
 
-/* Style the active link in the navigation bar */
-.nav-item.active .nav-link {
-  color: #007bff;
-}
 
-#navbarNav {
-  display: flex;
-  justify-content: right;
-}
+
+
 
 /* Style the header section */
 #header {
@@ -404,6 +398,8 @@ select {
   margin: 3%;
   border-radius: 25px;
   position:relative;
+  padding:3%;
+  min-height: 30vh;
 }
 .card-1, .card-2, .card-3 {
   transition: transform 0.3s ease;
@@ -415,11 +411,17 @@ select {
   background: linear-gradient(to bottom, #def3ff,#bfe8ff);
   margin: 3%;
   border-radius: 25px;
+  padding:3%;
+  min-height: 30vh;
+
 }
 .card-3 {
   background: linear-gradient(to bottom, #f7f4d7,#fff39c);
   margin: 3%;
   border-radius: 25px;
+  padding:3%;
+  min-height: 30vh;
+
 }
 .card-content {
   margin: 5%;
