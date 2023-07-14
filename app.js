@@ -93,6 +93,7 @@ passport.serializeUser(function (user, cb) {
     cb(null, { id: user.id, username: user.username });
   });
 });
+
 passport.deserializeUser(function (user, cb) {
   process.nextTick(function () {
     return cb(null, user);
@@ -168,6 +169,9 @@ app.get("/login", function(req, res) {
     res.render("login", { error: '' });
   }
 });
+app.get("/terms",function(req,res){
+  res.render("terms");
+}) 
 app.get("/signup", function(req, res) {
   if (req.isAuthenticated()) {
     res.redirect("/user");
