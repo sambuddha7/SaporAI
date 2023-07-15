@@ -30,6 +30,7 @@ app.locals._ = _;
 var result = "";
 var image_url;
 
+
 app.use(session({
   secret: "Meal2Go",
   resave: false,
