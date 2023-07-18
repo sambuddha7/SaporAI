@@ -35,7 +35,7 @@ body {
 /* Style the header section */
 #header {
   padding: 100px 0;
-  background-image: url('https://images.pexels.com/photos/7130555/pexels-photo-7130555.jpeg?cs=srgb&dl=pexels-codioful-%28formerly-gradienta%29-7130555.jpg&fm=jpg');
+  background-image: url('/logo/gradient-background.jpg');
   background-size: cover;
 
 }
@@ -171,7 +171,7 @@ body {
   /* color: white; */
   padding: 100px 0;
   /* background-color: #e6fff5; */
-  background-image: url('https://images.pexels.com/photos/7130555/pexels-photo-7130555.jpeg?cs=srgb&dl=pexels-codioful-%28formerly-gradienta%29-7130555.jpg&fm=jpg');
+  background-image: url('/logo/gradient-background.jpg');
   background-size: cover;
 }
 
@@ -627,6 +627,9 @@ select {
 #google-img {
   height: 15px;
 }
+#features p {
+  font-size: 1.3rem;
+}
 
 /* phone adjustments */
 @media (max-width:1096px) {
@@ -650,7 +653,9 @@ select {
   #cta .intro-button {
     font-size: 2rem;
   }
-  
+  #features p {
+    font-size: 3rem;
+  }
   /* form login section */
   .card {
     width: 85%;
