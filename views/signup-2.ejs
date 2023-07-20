@@ -13,11 +13,14 @@
           <div class="form-group">
             <label for="name">Name</label>
             <input type="text" name="name" id ="name" required>
-            
+              
              <label for="age">Age</label>
              <input type="number" id="age" min="0" max="100"name="age" required>
+             <div class="button h-button">
+
+             </div>
             <label>Gender</label>
-              <select class="select-3" name="gender">
+              <select class="h-select" style="width: auto; margin-left: 0;" name="gender">
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
@@ -55,9 +58,14 @@
             </div>
             
       
-            
-            <label for="weight">Weight</label>
-            <input placeholder="pounds"type="number" min="0" max="1000"id="weight" name="weight" required>
+            <div class="button h-button">
+              <label id="weight"for="weight">Weight</label>
+              <input class="h-select"  style="width:50%;"placeholder="Enter weight"type="number" min="0" max="1000"id="weight" name="weight" required>
+              <select class="h-select"style="width:20%; text-align:center;"name="weightUnit">
+                <option value="lbs" selected>lbs</option>
+                <option value="kgs">kgs</option>
+              </select>
+            </div>
             
             <button id="nextid" class="btn btnn btn-outline-secondary btn-login"type="button" data-next >Next</button>
            

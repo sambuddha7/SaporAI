@@ -79,6 +79,10 @@ const userSchema = new mongoose.Schema({
   favorites: {
     type: [[String]],
     default: []
+  },
+  weightUnit: {
+    type: String,
+    default: "lbs"
   }
 });
 userSchema.plugin(passportLocalMongoose);
@@ -187,6 +191,7 @@ app.get("/signup-2", function(req, res) {
   } else {
       res.redirect("/login");
   }
+  // res.render("signup-2");
 });
 
 app.get("/form-ai1", function(req, res) {
@@ -218,7 +223,13 @@ app.get("/user", function(req, res) {
   if (req.isAuthenticated()) {
     User.findById(req.user.id).then((foundUser) => {
       if (foundUser) {
-        const weight = foundUser.weight;
+        var weight = foundUser.weight;
+        const actualWeight = weight;
+        const weightUnit = foundUser.weightUnit;
+        if (weightUnit == "kgs") {
+          weight = weight * 2.20462;
+          weight = Math.round(weight);
+        }
         const height = foundUser.height;
         const age = foundUser.age;
         const gender = foundUser.gender;
@@ -240,13 +251,13 @@ app.get("/user", function(req, res) {
 
         var maintenanceCalories = Math.round(bmr * activityLevels[activityLevel]);
         if (foundUser.goal == "WeightLoss") {
-          maintenanceCalories -= 200;
+          maintenanceCalories -= 250;
         } else if (foundUser.goal == "WeightGain") {
           maintenanceCalories += 100;
         }
         foundUser.maintenance = maintenanceCalories;
         foundUser.save().then(()=> {
-          res.render("user", {userName: foundUser.name, BMR: maintenanceCalories, Weight: weight, gener: foundUser.recipeHistory.length});
+          res.render("user", {userName: foundUser.name, BMR: maintenanceCalories, Weight: actualWeight, Unit: weightUnit, gener: foundUser.recipeHistory.length});
         })
         .catch((err) => {
           console.log(err);
@@ -320,6 +331,7 @@ app.post("/signup-2", function(req, res) {
   const preference = req.body.preference;
   const goal = req.body.goal;
   const name = req.body.name;
+  const weightUnit = req.body.weightUnit;
   User.findById(req.user.id).then(function(foundUser){
     if (foundUser) {
       foundUser.name = name;
@@ -331,6 +343,7 @@ app.post("/signup-2", function(req, res) {
       foundUser.activity = activity;
       foundUser.preference = preference;
       foundUser.goal = goal;
+      foundUser.weightUnit = weightUnit;
       foundUser.save().then(()=> {
         res.redirect("/user");
       })

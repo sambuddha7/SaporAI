@@ -255,8 +255,13 @@ footer p {
   justify-content: left;
 }
 .h-select {
-  width: 25%;
+  width: 35%;
   padding-left: 5%;
+  border: 1px solid #333;
+  border-radius: .25em;
+  font-size: 1 rem;
+  padding: .25rem;
+  margin-left: 2%;
 }
 .card.active {
   display: block;
@@ -669,7 +674,7 @@ select {
   .form-group {
     font-size: 1.5rem;
   }
-  #email, #password {
+  #email, #password, #weight {
     font-size: 1.5rem;
   }
   .btnn {
