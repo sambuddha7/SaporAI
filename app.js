@@ -217,7 +217,6 @@ app.get("/transition1", function(req, res) {
     res.render("login");
   }
 });
-
 app.get("/user", function(req, res) {
 
   if (req.isAuthenticated()) {
@@ -294,7 +293,14 @@ app.get("/result-2", function(req, res) {
       res.redirect("login");
     }
 });
-
+app.get("/settings", function(req,res) {
+  // if (req.isAuthenticated()) {
+  //   res.render("settings");
+  // } else {
+  //   res.redirect("login");
+  // }
+  res.render("settings");
+})
 app.get("/recipe-history", function(req, res) {
   User.findById(req.user.id).then(function(foundUser) {
     if (foundUser) { 

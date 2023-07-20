@@ -177,3 +177,10 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+
+/* very bad way of resusing code below my bad */
+.navbar-brand {
+  font-size: 3rem;
+  font-weight: bold;
+}
