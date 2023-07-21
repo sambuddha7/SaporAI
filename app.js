@@ -294,12 +294,18 @@ app.get("/result-2", function(req, res) {
     }
 });
 app.get("/settings", function(req,res) {
-  // if (req.isAuthenticated()) {
-  //   res.render("settings");
-  // } else {
-  //   res.redirect("login");
-  // }
-  res.render("settings");
+  if (req.isAuthenticated()) {
+    User.findById(req.user.id).then(function(foundUser) {
+      if (foundUser) { 
+        res.render("settings", {Name: foundUser.name, Age: foundUser.age, Weight: foundUser.weight});
+      }
+    }).catch(function(err) {
+      console.log(err);
+    })
+  } else {
+    res.redirect("login");
+  }
+  // res.render("settings");
 })
 app.get("/recipe-history", function(req, res) {
   User.findById(req.user.id).then(function(foundUser) {
@@ -625,6 +631,59 @@ app.get("/history/:recName", function(req, res) {
   }
   // res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps});
 });
+
+
+
+
+app.get("/verify/:userId/:uniqueString", (req, res) => {
+  let {userId, uniqueString} = req.params;
+  userVerification
+    .find({userId})
+    .then((result) => {
+      const {expiresAt} = result[0];
+      const hashedUniqueString  = result[0].uniqueString;
+      if (expiresAt < Date.now()) {
+        userVerification
+          .deleteOne({userId})
+          .then(result => {
+            User
+              .deleteOne({_id : userId})
+              .then(() => {
+                res.render("home");
+              })
+          })
+      } else {
+        bcrypt
+          .compare(uniqueString, hashedUniqueString)
+          .then(result => {
+            if (result) {
+              User
+                .updateOne({_id: userId}, {verified: true})
+                .then(() => {
+                  userVerification
+                    .deleteOne({userId})
+                    .then(() => {
+                      //add smn
+                      res.send("email verified!");
+                    })
+                })
+
+            } else {
+              res.send("Check inbox again!");
+            }
+          })
+      }
+    })
+    .catch((error) => {
+      console.log(errorUser);
+      res.send("error verifying!");
+    })
+});
+
+
+
+
+
 
 //port stuff
 app.listen(3000, function() {

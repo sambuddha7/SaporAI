@@ -7,12 +7,11 @@
           <div class="form-group">
             <h3 class="step-title">My Details</h3>
             <p class="p-form-text">Manage your profile details</p>
-
-            <label for="name">Name</label>
-            <input type="text" name="name" id ="name" required>
+            <label for="name" >Name</label>
+            <input type="text" name="name" id ="name" value="<%= Name %>" required>
               
              <label for="age">Age</label>
-             <input type="number" id="age" min="0" max="100"name="age" required>
+             <input type="number" id="age" min="0" max="100"name="age" value="<%= Age%>"required>
              <div class="button h-button">
 
              </div>
@@ -57,7 +56,7 @@
       
             <div class="button h-button">
               <label id="weight"for="weight">Weight</label>
-              <input class="h-select"  style="width:50%;"placeholder="Enter weight"type="number" min="0" max="1000"id="weight" name="weight" required>
+              <input class="h-select"  value="<%= Weight %>"style="width:50%;"placeholder="Enter weight"type="number" min="0" max="1000"id="weight" name="weight" required>
               <select class="h-select"style="width:20%; text-align:center;"name="weightUnit">
                 <option value="lbs" selected>lbs</option>
                 <option value="kgs">kgs</option>
