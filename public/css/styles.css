@@ -216,7 +216,8 @@ footer p {
   padding: 25% 0;
   /* background-image: url('https://images.pexels.com/photos/7130555/pexels-photo-7130555.jpeg?cs=srgb&dl=pexels-codioful-%28formerly-gradienta%29-7130555.jpg&fm=jpg'); */
   background-size: cover;
-  /* background-color: #f2f2f2; */
+  background-color: #f3f6fd;
+
 }
 .sign-body {
   background-color:#f2f2f2;
