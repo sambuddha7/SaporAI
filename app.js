@@ -152,9 +152,7 @@ app.get('/auth/google/signup-2',
     // Successful authentication, redirect home.
     res.redirect('/goauth');
 });
-app.get("/test", function(req,res){
-  res.render("test");
-});
+
 app.get("/goauth", function(req,res) {
     console.log(req.user);
     User.findById(req.user.id).then((foundUser) => {
