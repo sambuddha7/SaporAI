@@ -4,5 +4,3 @@ let date = today.getDate();
 let formattedDate = month + ', ' + date;
 document.getElementById("date").textContent = formattedDate;
 
-
-

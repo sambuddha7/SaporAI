@@ -721,3 +721,26 @@ select {
     padding:2%;
   }
 }
+
+/* feedback button */
+.link-wrapper {
+  position: fixed;
+  right: 0px; /* Adjust the right position as needed */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vertical-link {
+  display: block;
+  writing-mode: vertical-lr; /* Vertical text from right to left */
+  text-orientation: mixed;
+  padding: 12px 20px;
+  background-color: #faa23c; /* Change the background color as needed */
+  color: #fff; /* Change the text color as needed */
+  text-decoration: none;
+  border-radius: 5px 0px 0px 5px;
+  cursor: pointer;
+}
