@@ -743,4 +743,9 @@ select {
   text-decoration: none;
   border-radius: 5px 0px 0px 5px;
   cursor: pointer;
+  transition: all .4s ease;
+}
+.vertical-link:hover {
+  padding: 12px 25px;
+
 }
