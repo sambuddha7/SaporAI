@@ -203,19 +203,19 @@ app.get("/form-ai1", function(req, res) {
   }
 });
 
-app.get("/transition", function(req, res) {
+app.get("/tr", function(req, res) {
   if (req.isAuthenticated()) {
-    res.render("transition");
+    res.render("tr");
   } else {
-    res.render("login");
+    res.render("../login");
   }
 });
 
-app.get("/transition1", function(req, res) {
+app.get("/tr1", function(req, res) {
   if (req.isAuthenticated()) {
-    res.render("transition1");
+    res.render("tr1");
   } else {
-    res.render("login");
+    res.render("../login");
   }
 });
 app.get("/user", function(req, res) {
@@ -476,7 +476,7 @@ var ingredients;
 var calories;
 var allergy;
 var pref;
-app.post("/transition", async (req, res) => {
+app.post("/tr", async (req, res) => {
   allergy = await getAllergy(req);
   pref = await getPreference(req);
   meal = req.body.meal;
@@ -488,14 +488,14 @@ app.post("/transition", async (req, res) => {
       calories /= 1.6;
     }
   }
-  res.redirect("/transition");
+  res.redirect("/tr");
 });
 
 var meal;
 var calories;
 var type;
 var diet;
-app.post("/transition1", async (req, res) => {
+app.post("/tr1", async (req, res) => {
   allergy = await getAllergy(req);
   pref = await getPreference(req);
   meal = req.body.meal;
@@ -508,7 +508,7 @@ app.post("/transition1", async (req, res) => {
       calories /= 1.6;
     }
   }
-  res.redirect("/transition1");
+  res.redirect("/tr1");
 });
 
 
