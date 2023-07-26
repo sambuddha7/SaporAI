@@ -758,13 +758,6 @@ select {
 
 /* Style to position the button on the extreme right of the recipe-header */
 .recipe-header {
-  position: relative;
+  display: flex;
+  justify-content: space-between;
 }
-
-#regenerate-btn {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-}
-
