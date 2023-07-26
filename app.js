@@ -645,6 +645,7 @@ app.post("/result-1", async(req, res) => {
 
 
 app.get("/history/:recName", function(req, res) {
+  last_ai = 3;
   if (req.isAuthenticated()) {
     User.findById(req.user.id).then((foundUser) => {
       if (foundUser) {
@@ -656,7 +657,7 @@ app.get("/history/:recName", function(req, res) {
           par = _.kebabCase(par);
           if (toMatch == par) {
               console.log(histArray[i][0]);
-              res.render("result-2", {recipeName: histArray[i][0], nutrInfo: histArray[i][1], ingr: histArray[i][2], steps: histArray[i][3]});
+              res.render("result-2", {recipeName: histArray[i][0], nutrInfo: histArray[i][1], ingr: histArray[i][2], steps: histArray[i][3], last_ai});
               break;
           } 
         }
