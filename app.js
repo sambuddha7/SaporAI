@@ -29,7 +29,7 @@ app.locals._ = _;
 
 var result = "";
 var image_url;
-
+var last_ai = "";
 
 app.use(session({
   secret: "Meal2Go",
@@ -289,7 +289,7 @@ app.get("/logout", function(req,res) {
 
 app.get("/result-2", function(req, res) {
   if (req.isAuthenticated()) {
-    res.render("result-2", {result});
+    res.render("result-2", {result, last_ai});
     } else {
       res.redirect("login");
     }
@@ -514,6 +514,7 @@ app.post("/tr1", async (req, res) => {
 
 app.post("/result-2", async(req, res) => {
   //api calls to be added
+  last_ai = 2;
   const marker = "###SECTION_MARKER###";
   console.log(calories);
   // var prompt = `Provide a list of 5 ${meal} recipes in the calorie range of ${calories} using the ingredients ${ingredients}`;
@@ -584,7 +585,7 @@ app.get("/result/:recName", function(req, res) {
     var recName = name.split(':');
     recName = recName[1];
     console.log("reached");
-    res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps, image:image_url});
+    res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps, image:image_url, last_ai});
   } else {
     res.redirect("login");
   }
@@ -592,6 +593,7 @@ app.get("/result/:recName", function(req, res) {
 
 app.post("/result-1", async(req, res) => {
   //api calls to be added
+  last_ai = 1;
   const marker = "###SECTION_MARKER###";
   var prompt = `Provide a ${type} ${meal} ${diet} recipe in the calorie range of ${calories}. Keep mind of the following diet allergies: ${allergy} . Strict diet preference of ${pref} Respond in the format:
   Dish Name:
@@ -640,6 +642,7 @@ app.post("/result-1", async(req, res) => {
     console.log("user error");
   })
 });
+
 
 app.get("/history/:recName", function(req, res) {
   if (req.isAuthenticated()) {
@@ -715,6 +718,7 @@ app.get("/verify/:userId/:uniqueString", (req, res) => {
       res.send("error verifying!");
     })
 });
+
 
 
 

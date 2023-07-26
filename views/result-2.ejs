@@ -1,17 +1,20 @@
 <%- include("partials/user-header") %>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="/result-script.js" defer></script>
 <div class="link-wrapper">
   <a href="https://forms.gle/BERUe2JhBEgaFyz26" class="vertical-link">Feedback?</a>
 </div>
   <div class="dashboard-container">
     <div class="result-body">
-      <!-- <h3> <%= recipeName %></h3> -->
-      <% const recName = recipeName.split(':'); %>
-      <% if (recName.length == 1) {%>
-        <h3> <%= recName[0] %></h3>
-      <% } else {%>
-        <h3> <%= recName[1] %></h3>
-      <% }%>      
+      <input value="<%=last_ai%>" style="display:none" id="last_ai"> 
+      <div class = "recipe-header">
+        <% const recName = recipeName.split(':'); %>
+        <h3>
+          <%= recName.length == 1 ? recName[0] : recName[1] %>
+          <button id="regenerate-btn" class="btn btn-outline-info">Regenerate</button>
+        </h3>
+      </div>
+      <!-- <h3> <%= recipeName %></h3> --> 
       <div id="nutr-container" class="card-n">
         <% const nutri = nutrInfo %>
         <%const lines = nutri.split('\n');%>
