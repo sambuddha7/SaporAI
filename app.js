@@ -476,12 +476,14 @@ var ingredients;
 var calories;
 var allergy;
 var pref;
+var cuisine;
 app.post("/tr", async (req, res) => {
   allergy = await getAllergy(req);
   pref = await getPreference(req);
   meal = req.body.meal;
   ingredients = JSON.parse(req.body.listData);
   calories = req.body.selection;
+  cuisine = req.body.cuisine;
   if (typeof calories === 'undefined') {
     calories = await getCalories(req);
     if (meal == 'snack') {
@@ -495,6 +497,7 @@ var meal;
 var calories;
 var type;
 var diet;
+var cuisine;
 app.post("/tr1", async (req, res) => {
   allergy = await getAllergy(req);
   pref = await getPreference(req);
@@ -502,6 +505,7 @@ app.post("/tr1", async (req, res) => {
   calories = req.body.selection;
   type = req.body.type;
   diet = req.body.diet;
+  cuisine = req.body.cuisine;
   if (typeof calories === 'undefined') {
     calories = await getCalories(req);
     if (meal == 'snack') {
@@ -518,7 +522,7 @@ app.post("/result-2", async(req, res) => {
   const marker = "###SECTION_MARKER###";
   console.log(calories);
   // var prompt = `Provide a list of 5 ${meal} recipes in the calorie range of ${calories} using the ingredients ${ingredients}`;
-  var prompt = `Provide a ${meal} recipe in the calorie range of ${calories} using only the ingredients ${ingredients}, some optional spices, optional garnishing and oils of your choice. Keep mind of the following diet allergies: ${allergy} . Strict diet preference of ${pref} Respond in the format:
+  var prompt = `Provide a ${cuisine} ${meal} recipe in the calorie range of ${calories} using only the ingredients ${ingredients}, some optional spices, optional garnishing and oils of your choice. Keep mind of the following diet allergies: ${allergy} . Strict diet preference of ${pref} Respond in the format:
    Dish Name:
    ${marker}
    Nutrtional Information:
@@ -595,7 +599,7 @@ app.post("/result-1", async(req, res) => {
   //api calls to be added
   last_ai = 1;
   const marker = "###SECTION_MARKER###";
-  var prompt = `Provide a ${type} ${meal} ${diet} recipe in the calorie range of ${calories}. Keep mind of the following diet allergies: ${allergy} . Strict diet preference of ${pref} Respond in the format:
+  var prompt = `Provide a ${cuisine} ${type} ${meal} ${diet} recipe in the calorie range of ${calories}. Keep mind of the following diet allergies: ${allergy} . Strict diet preference of ${pref} Respond in the format:
   Dish Name:
   ${marker}
   Nutrtional Information:
