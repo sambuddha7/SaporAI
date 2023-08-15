@@ -673,7 +673,9 @@ app.get("/history/:recName", function(req, res) {
 });
 
 
-
+app.get("/test", function(req,res) {
+  res.render("test");
+})
 
 app.get("/verify/:userId/:uniqueString", (req, res) => {
   let {userId, uniqueString} = req.params;
