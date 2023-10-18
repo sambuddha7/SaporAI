@@ -12,6 +12,7 @@ const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
+const axios = require('axios');
 
 //api 
 const {Configuration, OpenAIApi} = require("openai");
@@ -46,6 +47,7 @@ app.use(express.json());
 
 
 const mongopw = process.env.MONGOPW;
+const youtubeKey = process.env.YOUTUBE_KEY;
 mongoose.connect(`mongodb+srv://sbiswas7:${mongopw}@cluster0.mtk5ama.mongodb.net/userDB`, {useNewUrlParser: true});
 // mongoose.connect("mongodb://localhost:27017/usertestDB", {useNewUrlParser: true});
 
@@ -516,11 +518,12 @@ app.post("/tr1", async (req, res) => {
 });
 
 
+
+
 app.post("/result-2", async(req, res) => {
   //api calls to be added
   last_ai = 2;
   const marker = "###SECTION_MARKER###";
-  console.log(calories);
   // var prompt = `Provide a list of 5 ${meal} recipes in the calorie range of ${calories} using the ingredients ${ingredients}`;
   var prompt = `Provide a ${cuisine} ${meal} recipe in the calorie range of ${calories} using only the ingredients ${ingredients}, some optional spices, optional garnishing and oils of your choice. Keep mind of the following diet allergies: ${allergy} . Strict diet preference of ${pref} Respond in the format:
    Dish Name:
@@ -531,7 +534,6 @@ app.post("/result-2", async(req, res) => {
    ${marker}
    Instructions:`;
 
-  console.log(prompt);
   //api calls
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
@@ -571,10 +573,22 @@ app.post("/result-2", async(req, res) => {
   })
 });
 
-app.get("/result/:recName", function(req, res) {
-  if (req.isAuthenticated()) {
+function fetchYouTubeData(apiUrl) {
+  return axios.get(apiUrl)
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data; // Return the JSON data
+      } else {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+    })
+    .catch((error) => {
+      throw error;
+    });
+}
 
-    console.log(req.params.recName);
+app.get("/result/:recName", async function(req, res) {
+  if (req.isAuthenticated()) {
     const marker = "###SECTION_MARKER###";
     const sections = result.split(marker);
     const name = sections[0];
@@ -588,8 +602,20 @@ app.get("/result/:recName", function(req, res) {
     }
     var recName = name.split(':');
     recName = recName[1];
-    console.log("reached");
-    res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps, image:image_url, last_ai});
+    apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${youtubeKey}&part=snippet&q=${recName}&type=video`
+    //youtube api call
+    youtubeVideos = [];
+    try {
+      const youtubeData = await fetchYouTubeData(apiUrl);
+      
+      for (var i = 0; i < 3; i++) {
+        youtubeVideos.push('https://www.youtube.com/embed/' + youtubeData.items[i].id.videoId + '?si=YOhj4nHHBS4vW1NX');
+      }
+      
+    } catch {
+      console.error('Error fetching YouTube data:', error.message);
+    }
+    res.render("result-2", {recipeName: name, nutrInfo: nutritionInfo, ingr: ingredientss, steps: recipeSteps, image:image_url, last_ai, link_list: youtubeVideos});
   } else {
     res.redirect("login");
   }
@@ -607,7 +633,6 @@ app.post("/result-1", async(req, res) => {
   Ingredients:
   ${marker}
   Instructions:`;
-  console.log(prompt);
   //api calls
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",

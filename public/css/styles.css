@@ -761,3 +761,10 @@ select {
   display: flex;
   justify-content: space-between;
 }
+
+.iframe-wrapper {
+  width: 400px;
+  height: 225px;
+  display: inline-block; /* This makes the iframes display horizontally in one line */
+  white-space: nowrap; /* Prevents wrapping to the next line */
+}
