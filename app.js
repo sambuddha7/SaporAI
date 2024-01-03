@@ -5,21 +5,16 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const _ = require("lodash");
 
-const mongoose = require("mongoose");
-
 const session = require('express-session');
 const passport = require('passport');
-const passportLocalMongoose = require('passport-local-mongoose');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const findOrCreate = require('mongoose-findorcreate');
-const axios = require('axios');
 
 //api 
 const {Configuration, OpenAIApi} = require("openai");
 
 //diff file 
 
-const {fetchYouTubeData} = require("./views/api-calls/youtubeApi.js");
+const {fetchYouTubeData} = require("./api-calls/youtubeApi.js");
 
 //open ai api key auth
 const config = new Configuration({
@@ -50,7 +45,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 
 
-const { User } = require('./views/api-calls/db.js');
+const { User } = require('./api-calls/db.js');
 
 passport.use(User.createStrategy());
 
@@ -65,6 +60,7 @@ passport.deserializeUser(function (user, cb) {
     return cb(null, user);
   });
 });
+
 passport.use(new GoogleStrategy({
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
@@ -98,130 +94,30 @@ function (accessToken, refreshToken, profile, cb) {
 
 
 //get functions
-app.get("/", function(request, response) {
-  if (request.isAuthenticated()) {
-    response.redirect("/user");
-  } else {
-    response.render("home");
-  }
-  
-});
-app.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
-app.get('/auth/google/signup-2', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/goauth');
-});
 
-app.get("/goauth", function(req,res) {
-    console.log(req.user);
-    User.findById(req.user.id).then((foundUser) => {
-      if (foundUser) {
-        // res.redirect("/signup-2");
-        if (typeof foundUser.age === 'undefined') {
-          res.redirect("/signup-2");
-        } else {
-          res.redirect("/user");
-        }
-      }
-    }).catch(function(err) {
-      console.log("goauth error");
-    })
-  })
-app.get("/login", function(req, res) {
-  if (req.isAuthenticated()) {
-    res.redirect("/user");
-  } else {
-    res.render("login", { error: '' });
-  }
-});
-app.get("/terms",function(req,res){
-  res.render("terms");
-}) 
-app.get("/signup", function(req, res) {
-  if (req.isAuthenticated()) {
-    res.redirect("/user");
-  } else {
-    res.render("signup");
-  }
-  
-});
-app.get("/signup-2", function(req, res) {
-  if (req.isAuthenticated()) {
-    res.render("signup-2");
-  } else {
-      res.redirect("/login");
-  }
-  // res.render("signup-2");
-});
+const authRoutes = require('./routes/authRoutes.js');
 
-app.get("/form-ai1", function(req, res) {
-  if (req.isAuthenticated()) {
-    res.render("form-ai1");
-  } else {
-    res.redirect("login");
-  }
-});
+app.use('/', authRoutes);
 
-app.get("/tr", function(req, res) {
-  if (req.isAuthenticated()) {
-    res.render("tr");
-  } else {
-    res.render("../login");
-  }
-});
+const googleRoutes = require("./routes/googleRoutes.js");
 
-app.get("/tr1", function(req, res) {
-  if (req.isAuthenticated()) {
-    res.render("tr1");
-  } else {
-    res.render("../login");
-  }
-});
-const getUserRoute = require('./views/routes/getUser.js');
 
+//google auth get routes
+app.use('/', googleRoutes);
+
+
+
+const getUserRoute = require('./routes/userRoute.js');
 
 //user dashboard get route
 app.use("/user", getUserRoute);
 
-app.get("/form-ai2", function(req, res) {
-  if (req.isAuthenticated()) {
-      res.render("form-ai2");
-    } else {
-      res.redirect("login");
-    }
-});
-app.get("/logout", function(req,res) {
-  req.logout(function(err) {
-      if (err) { console.log("logout-error") }
-      res.redirect('/');
-    });
-});
+//setting
+const settingRoute = require("./routes/settingRoutes.js");
+app.use("/", settingRoute);
 
-app.get("/result-2", function(req, res) {
-  if (req.isAuthenticated()) {
-    res.render("result-2", {result, last_ai});
-    } else {
-      res.redirect("login");
-    }
-});
-app.get("/settings", function(req,res) {
-  if (req.isAuthenticated()) {
-    User.findById(req.user.id).then(function(foundUser) {
-      if (foundUser) { 
-        var feet = Math.floor(foundUser.height / 12);
-        var inches = foundUser.height % 12;
-        res.render("settings", {Name: foundUser.name, Age: foundUser.age, Weight: foundUser.weight, Gender: foundUser.gender, Feet: feet, Inches: inches, Activity: foundUser.activity, Preference: foundUser.preference, Goal: foundUser.goal, Allergy: foundUser.allergy, WeightUnit: foundUser.weightUnit});
-      }
-    }).catch(function(err) {
-      console.log(err);
-    })
-  } else {
-    res.redirect("login");
-  }
-  // res.render("settings");
-})
+
+//recipe history
 app.get("/recipe-history", function(req, res) {
   User.findById(req.user.id).then(function(foundUser) {
     if (foundUser) { 
@@ -235,105 +131,8 @@ app.get("/recipe-history", function(req, res) {
 });
 //signup form post method
 
-app.post("/signup", async (req, res) => {
-  User.register({username: req.body.username}, req.body.password, function(err, user) {
-    if (err) {
-        console.log(err);
-        res.redirect("/signup");
-    } else {
-        passport.authenticate("local")(req, res, function(){
-           res.redirect("/signup-2"); 
-        });
-    }
-  });
-});
-
-app.post("/signup-2", function(req, res) {
-  const age =  req.body.age;
-  const gender = req.body.gender;
-  const height =  parseInt(req.body.feet * 12) + parseInt(req.body.inches);
-  const weight =  req.body.weight;
-  const allergy = req.body.allergies;
-  const activity = req.body.activity;
-  const preference = req.body.preference;
-  const goal = req.body.goal;
-  const name = req.body.name;
-  const weightUnit = req.body.weightUnit;
-  User.findById(req.user.id).then(function(foundUser){
-    if (foundUser) {
-      foundUser.name = name;
-      foundUser.age = age;
-      foundUser.gender = gender;
-      foundUser.height = height;
-      foundUser.weight = weight;
-      foundUser.allergy = allergy;
-      foundUser.activity = activity;
-      foundUser.preference = preference;
-      foundUser.goal = goal;
-      foundUser.weightUnit = weightUnit;
-      foundUser.save().then(()=> {
-        res.redirect("/user");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    }
-  }).catch(function(err) {
-    console.log(err);
-  })
-});
-app.post('/update', function(req, res) {
-  const age =  req.body.age;
-  const gender = req.body.gender;
-  const height =  parseInt(req.body.feet * 12) + parseInt(req.body.inches);
-  const weight =  req.body.weight;
-  const allergy = req.body.allergies;
-  const activity = req.body.activity;
-  const preference = req.body.preference;
-  const goal = req.body.goal;
-  const name = req.body.name;
-  const weightUnit = req.body.weightUnit;
-  User.findById(req.user.id).then(function(foundUser){
-    if (foundUser) {
-      foundUser.name = name;
-      foundUser.age = age;
-      foundUser.gender = gender;
-      foundUser.height = height;
-      foundUser.weight = weight;
-      foundUser.allergy = allergy;
-      foundUser.activity = activity;
-      foundUser.preference = preference;
-      foundUser.goal = goal;
-      foundUser.weightUnit = weightUnit;
-      foundUser.save().then(()=> {
-        res.redirect("/user");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    }
-  }).catch(function(err) {
-    console.log(err);
-  })
-});
-app.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.render('login', { error: 'Incorrect username or password.' });
-    }
-    req.logIn(user, (err) => {
-      if (err) {
-        // Handle error
-        return next(err);
-      }
-      // User authentication succeeded, redirect or render a success page
-      return res.redirect('/user');
-    });
-  })(req, res, next);
-});
+const loginRoute = require("./routes/loginRoutes.js");
+app.use("/", loginRoute);
 
 // favorites section
 
@@ -410,6 +209,7 @@ var calories;
 var type;
 var diet;
 var cuisine;
+
 app.post("/tr1", async (req, res) => {
   allergy = await getAllergy(req);
   pref = await getPreference(req);
@@ -599,9 +399,7 @@ app.get("/history/:recName", function(req, res) {
 });
 
 
-app.get("/test", function(req,res) {
-  res.render("test");
-})
+
 
 app.get("/verify/:userId/:uniqueString", (req, res) => {
   let {userId, uniqueString} = req.params;
@@ -647,12 +445,6 @@ app.get("/verify/:userId/:uniqueString", (req, res) => {
       res.send("error verifying!");
     })
 });
-
-
-
-
-
-
 
 //port stuff
 app.listen(3000, function() {
